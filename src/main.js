@@ -1,77 +1,77 @@
 "use strict";
 
-const cardVariabler = {
-  color: [`black`, `yellow`, `blue`, `green`, `pink`],
+const CARD_VARABELS = {
+  COLOR: [`black`, `yellow`, `blue`, `green`, `pink`],
   repeatDays: [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`],
 };
 
 const DB = {
-  filterData: [
+  FILTERS_DATA: [
     {
-      title: `all`,
-      count: Math.floor(Math.random() * 201),
-      checked: false,
+      TITLE: `all`,
+      COUNT: Math.floor(Math.random() * 201),
+      CHECKED: false,
     },
     {
-      title: `OVERDUE`,
-      count: Math.floor(Math.random() * 201),
-      checked: false,
+      TITLE: `OVERDUE`,
+      COUNT: Math.floor(Math.random() * 201),
+      CHECKED: false,
     },
     {
-      title: `TODAY`,
-      count: Math.floor(Math.random() * 201),
-      checked: false,
+      TITLE: `TODAY`,
+      COUNT: Math.floor(Math.random() * 201),
+      CHECKED: false,
     },
     {
-      title: `FAVORITES`,
-      count: Math.floor(Math.random() * 201),
-      checked: false,
+      TITLE: `FAVORITES`,
+      COUNT: Math.floor(Math.random() * 201),
+      CHECKED: false,
     },
     {
-      title: `Repeating`,
-      count: Math.floor(Math.random() * 201),
-      checked: false,
+      TITLE: `Repeating`,
+      COUNT: Math.floor(Math.random() * 201),
+      CHECKED: false,
     },
     {
-      title: `Tags`,
-      count: Math.floor(Math.random() * 201),
-      checked: false,
+      TITLE: `Tags`,
+      COUNT: Math.floor(Math.random() * 201),
+      CHECKED: false,
     },
     {
-      title: `ARCHIVE`,
-      count: Math.floor(Math.random() * 201),
-      checked: false,
+      TITLE: `ARCHIVE`,
+      COUNT: Math.floor(Math.random() * 201),
+      CHECKED: false,
     },
   ],
 
-  cardData: [
+  CARD_DATA: [
     {
-      color: cardVariabler.color[0],
+      COLOR: CARD_VARABELS.COLOR[0],
     },
     {
-      color: cardVariabler.color[0],
+      COLOR: CARD_VARABELS.COLOR[0],
     },
     {
-      color: cardVariabler.color[0],
+      COLOR: CARD_VARABELS.COLOR[0],
     },
     {
-      color: cardVariabler.color[0],
+      COLOR: CARD_VARABELS.COLOR[0],
     },
     {
-      color: cardVariabler.color[0],
+      COLOR: CARD_VARABELS.COLOR[0],
     },
     {
-      color: cardVariabler.color[0],
+      COLOR: CARD_VARABELS.COLOR[0],
     },
     {
-      color: cardVariabler.color[0],
+      COLOR: CARD_VARABELS.COLOR[0],
     },
   ],
 };
 
 
-const boardTasks = document.querySelector(`.board__tasks`);
-const mainFilter = document.querySelector(`.main__filter`);
+const BOARD_TASKS = document.querySelector(`.board__tasks`);
+const MAIN_FILTER = document.querySelector(`.main__filter`);
 
 
 const cardRender = (color, id = 1) =>
@@ -386,7 +386,7 @@ const filterRender = ({title, count = 0, checked = false}) =>
 
 function filtersRender(arr) {
   for (let i = 0; i < arr.length; i++) {
-    mainFilter.innerHTML +=
+    MAIN_FILTER.innerHTML +=
       filterRender(arr[i])
     ;
   }
@@ -398,23 +398,23 @@ function filtersRender(arr) {
 
 function tasksRender(arr) {
   for (let i = 0; i < arr.length; i++) {
-    boardTasks.innerHTML +=
+    BOARD_TASKS.innerHTML +=
       cardRender(arr[i].color, i)
     ;
   }
 }
 
 function randomCard() {
-  boardTasks.innerHTML = ``;
+  BOARD_TASKS.innerHTML = ``;
   for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
-    boardTasks.innerHTML +=
-      cardRender(cardVariabler.color[Math.floor(Math.random() * 5)], i)
+    BOARD_TASKS.innerHTML +=
+      cardRender(CARD_VARABELS.COLOR[Math.floor(Math.random() * 5)], i)
     ;
   }
 }
 
 window.onload = function () {
-  filtersRender(DB.filterData);
-  tasksRender(DB.cardData);
+  filtersRender(DB.FILTERS_DATA);
+  tasksRender(DB.CARD_DATA);
 
 };
