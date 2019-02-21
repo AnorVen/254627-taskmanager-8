@@ -395,7 +395,7 @@ function filtersRender(arr) {
   }
   MainFilter.innerHTML += tempBlock;
 
-  MainFilter.addEventListener(`click`, randomCard);
+  MainFilter.addEventListener(`click`, clickOnFilterHandler);
 }
 
 function tasksRender(arr) {
@@ -407,8 +407,8 @@ function tasksRender(arr) {
   BoardTasks.innerHTML += tempBlock;
 }
 
+
 function randomCard() {
-  console.log(2)
   BoardTasks.innerHTML = ``;
   for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
     BoardTasks.innerHTML +=
@@ -416,6 +416,18 @@ function randomCard() {
     ;
   }
 }
+
+function clickOnFilterHandler(event) {
+  let target = event.target;
+  while (target !== MainFilter) {
+    if (target.className === `filter__label`) {
+      randomCard();
+      return;
+    }
+    target = target.parentNode;
+  }
+}
+
 
 window.onload = function () {
   filtersRender(DB.FILTERS_DATA);
