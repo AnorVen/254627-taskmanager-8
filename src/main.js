@@ -1,8 +1,10 @@
 "use strict";
 
-const CARD_VARABELS = {
-  COLOR: [`black`, `yellow`, `blue`, `green`, `pink`],
-  repeatDays: [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`],
+const CARD_VARIABLES = {
+  COLOR: {
+    black: `black`, yellow: `yellow`, blue: `blue`, green: `green`, pink: `pink`,
+  },
+  REPEAT_DAYS: [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`],
 };
 
 const DB = {
@@ -46,32 +48,32 @@ const DB = {
 
   CARD_DATA: [
     {
-      COLOR: CARD_VARABELS.COLOR[0],
+      COLOR: CARD_VARIABLES.COLOR.black,
     },
     {
-      COLOR: CARD_VARABELS.COLOR[0],
+      COLOR: CARD_VARIABLES.COLOR.black,
     },
     {
-      COLOR: CARD_VARABELS.COLOR[0],
+      COLOR: CARD_VARIABLES.COLOR.black,
     },
     {
-      COLOR: CARD_VARABELS.COLOR[0],
+      COLOR: CARD_VARIABLES.COLOR.black,
     },
     {
-      COLOR: CARD_VARABELS.COLOR[0],
+      COLOR: CARD_VARIABLES.COLOR.black,
     },
     {
-      COLOR: CARD_VARABELS.COLOR[0],
+      COLOR: CARD_VARIABLES.COLOR.black,
     },
     {
-      COLOR: CARD_VARABELS.COLOR[0],
+      COLOR: CARD_VARIABLES.COLOR.black,
     },
   ],
 };
 
 
-const BOARD_TASKS = document.querySelector(`.board__tasks`);
-const MAIN_FILTER = document.querySelector(`.main__filter`);
+const BoardTasks = document.querySelector(`.board__tasks`);
+const MainFilter = document.querySelector(`.main__filter`);
 
 
 const cardRender = (color, id = 1) =>
@@ -370,45 +372,47 @@ const cardRender = (color, id = 1) =>
       </article>
 `;
 
-const filterRender = ({title, count = 0, checked = false}) =>
+const filterRender = ({TITLE, COUNT = 0, checked = false}) =>
   `<input type="radio"
-          id="filter__${title.toLowerCase()}"
+          id="filter__${TITLE.toLowerCase()}"
           class="filter__input visually-hidden"
           name="filter"
           ${checked ? `checked` : ``}
-          ${count === 0 ? `disabled` : ``}
+          ${COUNT === 0 ? `disabled` : ``}
         />
-        <label for="filter__${title.toLowerCase()}" class="filter__label">
-          ${title.toUpperCase()} <span class="filter__all-count">${count}</span></label
+        <label for="filter__${TITLE.toLowerCase()}" class="filter__label">
+          ${TITLE.toUpperCase()} <span class="filter__all-count">${COUNT}</span></label
         >`
 ;
 
 
 function filtersRender(arr) {
+  let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
-    MAIN_FILTER.innerHTML +=
+    tempBlock +=
       filterRender(arr[i])
     ;
   }
-  let filterLabel = document.querySelectorAll(`main .filter__label`);
-  for (let i = 0; i < filterLabel.length; i++) {
-    filterLabel[i].addEventListener(`click`, randomCard);
-  }
+  MainFilter.innerHTML += tempBlock;
+
+  MainFilter.addEventListener(`click`, randomCard);
 }
 
 function tasksRender(arr) {
+  let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
-    BOARD_TASKS.innerHTML +=
-      cardRender(arr[i].color, i)
+    tempBlock += cardRender(arr[i].color, i)
     ;
   }
+  BoardTasks.innerHTML += tempBlock;
 }
 
 function randomCard() {
-  BOARD_TASKS.innerHTML = ``;
+  console.log(2)
+  BoardTasks.innerHTML = ``;
   for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
-    BOARD_TASKS.innerHTML +=
-      cardRender(CARD_VARABELS.COLOR[Math.floor(Math.random() * 5)], i)
+    BoardTasks.innerHTML +=
+      cardRender(CARD_VARIABLES.COLOR[Math.floor(Math.random() * 5)], i)
     ;
   }
 }
@@ -416,5 +420,4 @@ function randomCard() {
 window.onload = function () {
   filtersRender(DB.FILTERS_DATA);
   tasksRender(DB.CARD_DATA);
-
 };
