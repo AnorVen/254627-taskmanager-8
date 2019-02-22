@@ -412,7 +412,9 @@ function randomCard() {
   BoardTasks.innerHTML = ``;
   for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
     BoardTasks.innerHTML +=
-      cardRender(CARD_VARIABLES.COLOR[Math.floor(Math.random() * 5)], i)
+      cardRender(CARD_VARIABLES.COLOR[
+          Object.keys(CARD_VARIABLES.COLOR)[Math.floor(Math.random() *
+            Object.keys(CARD_VARIABLES.COLOR).length)]], i)
     ;
   }
 }
