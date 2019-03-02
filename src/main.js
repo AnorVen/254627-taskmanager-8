@@ -3,7 +3,11 @@ import cardRender from './templates/Cards';
 
 const CARD_VARIABLES = {
   COLOR: {
-    black: `black`, yellow: `yellow`, blue: `blue`, green: `green`, pink: `pink`,
+    black: `black`,
+    yellow: `yellow`,
+    blue: `blue`,
+    green: `green`,
+    pink: `pink`,
   },
   REPEAT_DAYS: [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`],
 };
@@ -72,16 +76,13 @@ const DB = {
   ],
 };
 
-
 const BoardTasks = document.querySelector(`.board__tasks`);
 const MainFilter = document.querySelector(`.main__filter`);
 
 function filtersRender(arr) {
   let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
-    tempBlock +=
-      filterRender(arr[i])
-    ;
+    tempBlock += filterRender(arr[i]);
   }
   MainFilter.insertAdjacentHTML(`beforeend`, tempBlock);
 
@@ -91,22 +92,17 @@ function filtersRender(arr) {
 function tasksRender(arr) {
   let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
-    tempBlock += cardRender(arr[i].color, i)
-    ;
+    tempBlock += cardRender(arr[i].color, i);
   }
   BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
 }
-
 
 function randomCard() {
   BoardTasks.innerHTML = ``;
   let tempBlock = ``;
   for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
-    tempBlock +=
-      cardRender(CARD_VARIABLES.COLOR[
-        Object.keys(CARD_VARIABLES.COLOR)[Math.floor(Math.random() *
-          Object.keys(CARD_VARIABLES.COLOR).length)]], i)
-    ;
+    tempBlock += cardRender(CARD_VARIABLES.COLOR[Object.keys(CARD_VARIABLES.COLOR)[
+      Math.floor(Math.random() * Object.keys(CARD_VARIABLES.COLOR).length)]], i);
   }
   BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
 }
@@ -121,7 +117,6 @@ function clickOnFilterHandler(event) {
     target = target.parentNode;
   }
 }
-
 
 window.onload = function () {
   filtersRender(DB.FILTERS_DATA);

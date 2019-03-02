@@ -1,5 +1,4 @@
-const cardRender = (color, id = 1) =>
-  `
+const cardRender = (color, id = 1) => `
    <article class="card card--${color}">
         <form class="card__form" method="get">
           <div class="card__inner">
@@ -293,6 +292,4 @@ const cardRender = (color, id = 1) =>
         </form>
       </article>
 `;
-
-
 export default cardRender;
