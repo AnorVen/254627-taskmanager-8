@@ -1,80 +1,8 @@
 import filterRender from './templates/Fliters';
 import cardRender from './templates/Cards';
+import { Database as DB, CARD_VARIABLES} from './database/Database';
 
-const CARD_VARIABLES = {
-  COLOR: {
-    black: `black`,
-    yellow: `yellow`,
-    blue: `blue`,
-    green: `green`,
-    pink: `pink`,
-  },
-  REPEAT_DAYS: [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`],
-};
 
-const DB = {
-  FILTERS_DATA: [
-    {
-      TITLE: `all`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `OVERDUE`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `TODAY`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `FAVORITES`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `Repeating`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `Tags`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `ARCHIVE`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-  ],
-
-  CARD_DATA: [
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-  ],
-};
 
 const BoardTasks = document.querySelector(`.board__tasks`);
 const MainFilter = document.querySelector(`.main__filter`);
