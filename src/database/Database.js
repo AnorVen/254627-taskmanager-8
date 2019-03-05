@@ -1,12 +1,14 @@
-const TASK = {
-  title: '',
-
-};
-
 export const CARD_VARIABLES = {
-  TASKS: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`],
-  dueDate: new Date(),
-  tags: new Set(),
+  title: [`Изучить теорию`,
+    `Сделать домашку`,
+    `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
+  dueDate: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000,
+  tags: new Set([
+    `cinema`,
+    `entertainment`,
+    `myself`,
+    `cinema`,
+  ]),
   picture: `http://picsum.photos/100/100?r=${Math.random()}`,
   COLOR: {
     black: `black`,
@@ -17,7 +19,10 @@ export const CARD_VARIABLES = {
   },
   REPEAT_DAYS: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
   isFavorite: true,
-  isDone: false
+  isDone: false,
+  isEdit: false,
+  isArchive: false,
+
 };
 
 export const Database = {

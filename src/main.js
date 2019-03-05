@@ -1,8 +1,6 @@
 import filterRender from './templates/Fliters';
-import cardRender from './templates/Cards';
-import { Database as DB, CARD_VARIABLES} from './database/Database';
-
-
+import {cardRender, cardEdit, newTask} from './templates/Cards';
+import {Database as DB, CARD_VARIABLES} from './database/Database';
 
 const BoardTasks = document.querySelector(`.board__tasks`);
 const MainFilter = document.querySelector(`.main__filter`);
