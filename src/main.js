@@ -1,5 +1,5 @@
 import filterRender from './templates/Fliters';
-import {cardRender, cardEdit, newTask} from './templates/Cards';
+import {cardRender, cardEdit, newTask} from './templates/Cards/Cards';
 import {Database as DB, CARD_VARIABLES} from './database/Database';
 
 const BoardTasks = document.querySelector(`.board__tasks`);
@@ -18,7 +18,7 @@ function filtersRender(arr) {
 function tasksRender(arr) {
   let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
-    tempBlock += cardRender(arr[i].color, i);
+    tempBlock += cardRender(arr[i], i);
   }
   BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
 }

@@ -1,19 +1,28 @@
 // вопрос  value="${dueDate.getHours()}:${dueDate.getMinutes()} PM" - тут проверку на AM/PM лучше делать в шаблоне, или подготавливать данные за ранее и уже разбитыми объектами присылать в шаблон? т.е. вынести проверку (dueDate.getHours() % 12) > 0 ? `PM` : `AM`
 
-export const cardRender = (
-    color = `black`,
-    id = 1,
-    title = `пустой таск, видимо тренеровочный...`,
-    dueDate = null,
-    tags = new Set([]),
-    picture = `http://picsum.photos/100/100?r=${Math.random()}`,
-    REPEAT_DAYS = [],
-    isFavorite = false,
-    isDone = false,
-    isEdit = false,
-    isArchive = false
-) => `
-   <article class="card card--${color}">
+import { repeatingDaysRender, deadlineRender } from './functionSubRenderCard';
+
+export const cardRender = ({
+  color = `black`,
+  id = 1,
+  title = `пустой таск, видимо тренеровочный...`,
+  dueDate = new Date(),
+  tags = new Set([]),
+  picture = `http://picsum.photos/100/100?r=${Math.random()}`,
+  REPEAT_DAYS = {
+    mo: false,
+    tu: false,
+    we: false,
+    th: false,
+    fr: false,
+    sa: false,
+    su: false,
+  },
+  isFavorite = false,
+  isDone = false,
+  isEdit = false,
+  isArchive = false,
+}) => `<article class="card card--${color}">
         <form class="card__form" method="get">
           <div class="card__inner">
             <div class="card__control">
@@ -43,9 +52,7 @@ export const cardRender = (
                       class="card__text"
                       placeholder="Start typing your text here..."
                       name="text"
-                    >
-                    ${title}
-</textarea>
+                    >${title}</textarea>
               </label>
             </div>
 
@@ -56,26 +63,7 @@ export const cardRender = (
                     date: <span class="card__date-status">${dueDate ? dueDate : `no`}</span>
                   </button>
 
-                  <fieldset class="card__date-deadline">
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__date"
-                        type="text"
-                        placeholder="23 September"
-                        name="date"
-                        value="${dueDate.getDate()} ${dueDate.getMonth()} ${dueDate.getFullYear()}"
-                      />
-                    </label>
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__time"
-                        type="text"
-                        placeholder="11:15 PM"
-                        name="time"
-                        value="${dueDate.getHours()}:${dueDate.getMinutes()} PM"
-                      />
-                    </label>
-                  </fieldset>
+                  ${deadlineRender(dueDate)}
 
                   <button class="card__repeat-toggle" type="button">
                     repeat:<span class="card__repeat-status">no</span>
@@ -83,181 +71,22 @@ export const cardRender = (
 
                   <fieldset class="card__repeat-days">
                     <div class="card__repeat-days-inner">
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    //тут бы форин зафигачить... 
-                    
-                    
-                    ${REPEAT_DAYS.map((item) =>(`<input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-${item}-${id}"
-                        name=""
-                        value="${item}"
-                      />
-                      <label class="card__repeat-day" for="repeat-mo-${id}"
-                      >${item}</label>`))}
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                      
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-tu-${id}"
-                        name="repeat"
-                        value="tu"
-                        checked
-                      />
-                      <label class="card__repeat-day" for="repeat-tu-${id}"
-                      >tu</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-we-${id}"
-                        name="repeat"
-                        value="we"
-                      />
-                      <label class="card__repeat-day" for="repeat-we-${id}"
-                      >we</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-th-${id}"
-                        name="repeat"
-                        value="th"
-                      />
-                      <label class="card__repeat-day" for="repeat-th-${id}"
-                      >th</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-fr-${id}"
-                        name="repeat"
-                        value="fr"
-                        checked
-                      />
-                      <label class="card__repeat-day" for="repeat-fr-${id}"
-                      >fr</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        name="repeat"
-                        value="sa"
-                        id="repeat-sa-${id}"
-                      />
-                      <label class="card__repeat-day" for="repeat-sa-${id}"
-                      >sa</label
-                      >
-                      <input
-                        class="visually-hidden card__repeat-day-input"
-                        type="checkbox"
-                        id="repeat-su-${id}"
-                        name="repeat"
-                        value="su"
-                        checked
-                      />
-                      <label class="card__repeat-day" for="repeat-su-${id}"
-                      >su</label
-                      >
+                    ${repeatingDaysRender(REPEAT_DAYS, id)}
+                   
                     </div>
                   </fieldset>
                 </div>
 
                 <div class="card__hashtag">
                   <div class="card__hashtag-list">
-                        <span class="card__hashtag-inner">
-                          <input
-                            type="hidden"
-                            name="hashtag"
-                            value="repeat"
-                            class="card__hashtag-hidden-input"
-                          />
-                          <button type="button" class="card__hashtag-name">
-                            #repeat
-                          </button>
-                          <button type="button" class="card__hashtag-delete">
-                            delete
-                          </button>
-                        </span>
-
-                    <span class="card__hashtag-inner">
-                          <input
-                            type="hidden"
-                            name="hashtag"
-                            value="repeat"
-                            class="card__hashtag-hidden-input"
-                          />
-                          <button type="button" class="card__hashtag-name">
-                            #cinema
-                          </button>
-                          <button type="button" class="card__hashtag-delete">
-                            delete
-                          </button>
-                        </span>
-
-                    <span class="card__hashtag-inner">
-                          <input
-                            type="hidden"
-                            name="hashtag"
-                            value="repeat"
-                            class="card__hashtag-hidden-input"
-                          />
-                          <button type="button" class="card__hashtag-name">
-                            #entertaiment
-                          </button>
-                          <button type="button" class="card__hashtag-delete">
-                            delete
-                          </button>
-                        </span>
+                  
+                  
+                       ${Array.from(tags).map((tag) => `<span class="card__hashtag-inner">
+        <input type="hidden" name="hashtag" value="${tag}" 
+        class="card__hashtag-hidden-input" />
+                      <button type="button" class="card__hashtag-name">#${tag}</button>
+                      <button type="button" class="card__hashtag-delete">delete</button>
+                    </span>`.trim()).join(``)}
                   </div>
 
                   <label>
@@ -278,7 +107,7 @@ export const cardRender = (
                   name="img"
                 />
                 <img
-                  src="img/sample-img.jpg"
+                  src="${picture}"
                   alt="task picture"
                   class="card__img"
                 />
@@ -363,6 +192,7 @@ export const cardRender = (
 
 //заготовки на будущее
 export const cardEdit = `
+
      <article class="card card--edit card--yellow card--repeat">
         <form class="card__form" method="get">
           <div class="card__inner">
@@ -657,9 +487,11 @@ Here is a card with filled data</textarea
           </div>
         </form>
       </article>
+
 `;
 
 export const newTask = `
+
       <article class="card card--edit card--black">
         <form class="card__form" method="get">
           <div class="card__inner">
