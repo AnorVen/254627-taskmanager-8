@@ -1,8 +1,6 @@
 export function repeatingDaysRender(obj, id) {
   let tempHTML = ``;
-
-
-  for ( let key in obj) {
+  for (let key in obj) {
     tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox"
         id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" />
     <label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;

@@ -1,6 +1,6 @@
 // вопрос  value="${dueDate.getHours()}:${dueDate.getMinutes()} PM" - тут проверку на AM/PM лучше делать в шаблоне, или подготавливать данные за ранее и уже разбитыми объектами присылать в шаблон? т.е. вынести проверку (dueDate.getHours() % 12) > 0 ? `PM` : `AM`
 
-import { repeatingDaysRender, deadlineRender } from './functionSubRenderCard';
+import {repeatingDaysRender, deadlineRender} from './functionSubRenderCard';
 
 export const cardRender = ({
   color = `black`,
@@ -190,7 +190,7 @@ export const cardRender = ({
       </article>
 `;
 
-//заготовки на будущее
+// заготовки на будущее
 export const cardEdit = `
 
      <article class="card card--edit card--yellow card--repeat">
