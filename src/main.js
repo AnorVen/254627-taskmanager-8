@@ -1,80 +1,6 @@
 import filterRender from './templates/Fliters';
-import cardRender from './templates/Cards';
-
-const CARD_VARIABLES = {
-  COLOR: {
-    black: `black`,
-    yellow: `yellow`,
-    blue: `blue`,
-    green: `green`,
-    pink: `pink`,
-  },
-  REPEAT_DAYS: [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`],
-};
-
-const DB = {
-  FILTERS_DATA: [
-    {
-      TITLE: `all`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `OVERDUE`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `TODAY`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `FAVORITES`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `Repeating`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `Tags`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-    {
-      TITLE: `ARCHIVE`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
-    },
-  ],
-
-  CARD_DATA: [
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-    {
-      COLOR: CARD_VARIABLES.COLOR.black,
-    },
-  ],
-};
+import {cardRender, cardEdit, newTask} from './templates/Cards/Cards';
+import {Database as DB, CARD_VARIABLES} from './database/Database';
 
 const BoardTasks = document.querySelector(`.board__tasks`);
 const MainFilter = document.querySelector(`.main__filter`);
@@ -92,7 +18,7 @@ function filtersRender(arr) {
 function tasksRender(arr) {
   let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
-    tempBlock += cardRender(arr[i].color, i);
+    tempBlock += cardRender(arr[i], i);
   }
   BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
 }
