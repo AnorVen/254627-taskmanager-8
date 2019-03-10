@@ -1,4 +1,6 @@
-import filterRender from './templates/Fliters';
+import {Task} from './Classes/Task';
+import {Filter} from './Classes/Filter';
+import {TaskEdit} from './Classes/TaskEdit';
 import {cardRender, cardEdit, newTask} from './templates/Cards/Cards';
 import {Database as DB, CARD_VARIABLES} from './database/Database';
 
@@ -8,7 +10,8 @@ const MainFilter = document.querySelector(`.main__filter`);
 function filtersRender(arr) {
   let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
-    tempBlock += filterRender(arr[i]);
+    let tempFiletrItem = new Filter(arr[i]);
+    tempBlock += tempFiletrItem.render;
   }
   MainFilter.insertAdjacentHTML(`beforeend`, tempBlock);
 
@@ -18,20 +21,24 @@ function filtersRender(arr) {
 function tasksRender(arr) {
   let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
-    tempBlock += cardRender(arr[i], i);
+    let firstTask = new Task({i, ...arr[i]});
+    firstTask.render(BoardTasks);
+   // tempBlock += cardRender(arr, i);
   }
-  BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
+//  BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
 }
 
 function randomCard() {
   BoardTasks.innerHTML = ``;
   let tempBlock = ``;
   for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
-    tempBlock += cardRender(CARD_VARIABLES.COLOR[Object.keys(CARD_VARIABLES.COLOR)[
-      Math.floor(Math.random() * Object.keys(CARD_VARIABLES.COLOR).length)]], i);
+    let color = CARD_VARIABLES.COLOR[Object.keys(CARD_VARIABLES.COLOR)[Math.floor(Math.random() * Object.keys(CARD_VARIABLES.COLOR).length)]];
+    let id = i;
+    tempBlock += cardRender({color, id});
   }
   BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
 }
+
 
 function clickOnFilterHandler(event) {
   let target = event.target;
@@ -43,6 +50,8 @@ function clickOnFilterHandler(event) {
     target = target.parentNode;
   }
 }
+
+
 
 window.onload = function () {
   filtersRender(DB.FILTERS_DATA);

@@ -8,6 +8,26 @@ export function repeatingDaysRender(obj, id) {
   return tempHTML;
 }
 
+export function tagsRender(tags) {
+  console.log(Array.from(tags).length)
+  if (Array.from(tags).length > 2) {
+    tags = Array.from(tags)
+    let newItems = [];
+    for (let i = 0; i < 2; i++) {
+      let idx = Math.floor(Math.random() * tags.length);
+      newItems.push(tags[idx]);
+      tags.splice(idx, 1);
+    }
+    tags = newItems;
+  }
+  return (Array.from(tags).map((tag) => `<span class="card__hashtag-inner">
+       <input type="hidden" name="hashtag" value="${tag}" 
+class="card__hashtag-hidden-input" />
+    <button type="button" class="card__hashtag-name">#${tag}</button>
+    <button type="button" class="card__hashtag-delete">delete</button>
+    </span>`.trim()).join(``));
+}
+
 export function deadlineRender(dueDate) {
   let realDate = new Date(dueDate);
   let hours = realDate.getHours();
