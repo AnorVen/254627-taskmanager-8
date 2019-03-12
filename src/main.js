@@ -1,6 +1,7 @@
-import {Task} from './Classes/Task';
+
 import {Filter} from './Classes/Filter';
 import {TaskEdit} from './Classes/TaskEdit';
+import {Task} from './Classes/Task';
 import {cardRender, cardEdit, newTask} from './templates/Cards/Cards';
 import {Database as DB, CARD_VARIABLES} from './database/Database';
 
@@ -19,13 +20,11 @@ function filtersRender(arr) {
 }
 
 function tasksRender(arr) {
-  let tempBlock = ``;
   for (let i = 0; i < arr.length; i++) {
     let firstTask = new Task({i, ...arr[i]});
+    let firstTaskEdit = new TaskEdit({i, ...arr[i]});
     firstTask.render(BoardTasks);
-   // tempBlock += cardRender(arr, i);
   }
-//  BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
 }
 
 function randomCard() {

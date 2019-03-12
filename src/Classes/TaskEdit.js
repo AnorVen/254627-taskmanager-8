@@ -1,13 +1,40 @@
+import {createElement} from '../createElement';
 export class TaskEdit {
-  constructor(data) {
-    this._title = data.title;
-    this._dueDate = data.dueDate;
-    this._tags = data.tags;
-    this._picture = data.picture;
-    this._repeatingDays = data.repeatingDays;
+  constructor({
+                id = 1,
+                color = `black`,
+                title = `таск редактируется...`,
+                dueDate = new Date(),
+                tags = new Set([]),
+                picture = `http://picsum.photos/100/100?r=${Math.random()}`,
+                REPEAT_DAYS = {
+                  mo: false,
+                  tu: false,
+                  we: false,
+                  th: false,
+                  fr: false,
+                  sa: false,
+                  su: false,
+                },
+                isFavorite = false,
+                isDone = false,
+                isArchive = false,
+              }) {
+    this._color = color;
+    this._id = id;
+    this._title = title;
+    this._dueDate = dueDate;
+    this._tags = tags;
+    this._picture = picture;
+    this._repeatingDays = REPEAT_DAYS;
+    this._isFavorite = isFavorite;
+    this._isDone = isDone;
+    this._isArchive = isArchive;
 
     this._element = null;
-    this._onSubmit = null;
+    this._state = {
+      isEdit: false
+    };
   }
 
   _onSubmitButtonClick(evt) {
@@ -26,6 +53,72 @@ export class TaskEdit {
   get element() {
     return this._element;
   }
+  unrender() {
+    this.unbind();
+    this._element = null;
+  }
+
+  bind() {
+    this._element.querySelector(`.card__form`).addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
+  }
+
+  unbind() {
+    this._element.querySelector(`.card__form`).removeEventListener(`submit`, this._onSubmitButtonClick.bind(this));
+  }
+
+  _colorVariablesRender(id, color) {
+    let colors = [`black`, `yellow`, `blue`, `green`, `pink`];
+    let colorVariables = colors.map((item) => (
+      `<input type="radio" id="color-${item}-${id}"
+                    class="card__color-input card__color-input--${item} visually-hidden"
+                    name="color"
+                    value="${item}"
+                    ${item === color ? `checked` : null}
+                  />
+                  <label
+                    for="color-${item}-${this._id}"
+                    class="card__color card__color--${item}"
+                  >${item}</label>`
+    ))
+    return colorVariables.join(``);
+
+  }
+
+  _deadlineRender(dueDate) {
+    let realDate = new Date(dueDate);
+    let hours = realDate.getHours();
+    let minutes = realDate.getMinutes();
+    let tempHTML = `<fieldset class="card__date-deadline">
+                    <label class="card__input-deadline-wrap">
+                      <input
+                        class="card__date"
+                        type="text"
+                        placeholder="23 September"
+                        name="date"
+                        value="${realDate.getDate()} ${realDate.getMonth() + 1} ${realDate.getFullYear()}"
+                      />
+                    </label>
+                    <label class="card__input-deadline-wrap">
+                      <input
+                        class="card__time"
+                        type="text"
+                        placeholder="11:15 PM"
+                        name="time"
+                        value="${hours > 12 ? (hours - 12) : hours}:${minutes} ${hours > 12 ? `PM` : `AM`}"/>
+                    </label>
+                  </fieldset>`;
+    return tempHTML;
+  }
+
+  _repeatingDaysRender(obj, id) {
+    let tempHTML = ``;
+    for (let key in obj) {
+      tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox"
+        id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" />
+    <label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
+    }
+    return tempHTML;
+  }
 
   get template() {
     return `
@@ -35,18 +128,18 @@ export class TaskEdit {
           <div class="card__control">
             <button type="button" class="card__btn card__btn--edit">edit</button>
             <button type="button" class="card__btn card__btn--archive">archive</button>
-            <button type="button" class="card__btn card__btn--favorites card__btn--disabled">favorites</button>
-          </div>
-    
-          <div class="card__color-bar">
-            <svg class="card__color-bar-wave" width="100%" height="10">
-              <use xlink:href="#wave"></use>
-            </svg>
-          </div>
-    
-          <div class="card__textarea-wrap">
-            <label>
-              <textarea class="card__text" placeholder="Start typing your text here..." name="text">${this._title}</textarea>
+            <button type="button" class="card__btn card__btn--favorites ${this._isFavorite ? null : `card__btn--disabled`}">favorites</button>
+            </div>
+      
+            <div class="card__color-bar">
+              <svg class="card__color-bar-wave" width="100%" height="10">
+                <use xlink:href="#wave"></use>
+              </svg>
+            </div>
+      
+            <div class="card__textarea-wrap">
+              <label>
+                <textarea class="card__text" placeholder="Start typing your text here..." name="text">${this._title}</textarea>
             </label>
           </div>
     
@@ -54,58 +147,33 @@ export class TaskEdit {
             <div class="card__details">
               <div class="card__dates">
                 <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">no</span>
-                </button>
-    
-                <fieldset class="card__date-deadline" disabled>
-                  <label class="card__input-deadline-wrap">
-                    <input class="card__date" type="text" placeholder="23 September" name="date" />
-                  </label>
-    
-                  <label class="card__input-deadline-wrap">
-                    <input class="card__time" type="text" placeholder="11:15 PM" name="time" />
-                  </label>
-                </fieldset>
-    
-                <button class="card__repeat-toggle" type="button">
-                  repeat: <span class="card__repeat-status">no</span>
-                </button>
-    
-                <fieldset class="card__repeat-days" disabled>
-                  <div class="card__repeat-days-inner">
-                    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-mo-5" name="repeat" value="mo" />
-                    <label class="card__repeat-day" for="repeat-mo-5">mo</label>
-    
-                    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-tu-5" name="repeat" value="tu" checked />
-                    <label class="card__repeat-day" for="repeat-tu-5">tu</label>
-    
-                    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-we-5" name="repeat" value="we" />
-                    <label class="card__repeat-day" for="repeat-we-5" >w</label>
-    
-                    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-th-5" name="repeat" value="th" />
-                    <label class="card__repeat-day" for="repeat-th-5">th</label>
-    
-                    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-fr-5" name="repeat" value="fr" checked />
-                    <label class="card__repeat-day" for="repeat-fr-5" >fr</label>
-    
-                    <input class="visually-hidden card__repeat-day-input" type="checkbox" name="repeat" value="sa" id="repeat-sa-5" />
-                    <label class="card__repeat-day" for="repeat-sa-5">sa</label>
-    
-                    <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-su-5" name="repeat" value="su" checked />
-                    <label class="card__repeat-day" for="repeat-su-5" >su</label>
-                  </div>
-                </fieldset>
-              </div>
-    
-              <div class="card__hashtag">
-                <div class="card__hashtag-list">
-                  ${(Array.from(this._tags).map(tag => (`
+                  date: <span class="card__date-status">
+${this._dueDate ? this._dueDate : `no`}</span>
+                  </button>
+                  
+                        ${this._deadlineRender(this._dueDate)} 
+                       
+                  <button class="card__repeat-toggle" type="button">
+                    repeat: <span class="card__repeat-status">no</span>
+                  </button>
+      
+                  <fieldset class="card__repeat-days" disabled>
+                    <div class="card__repeat-days-inner">
+                    
+                      ${this._repeatingDaysRender(this._repeatingDays, this._id)}
+                    
+                    </div>
+                  </fieldset>
+                </div>
+      
+                <div class="card__hashtag">
+                  <div class="card__hashtag-list">
+                ${(Array.from(this._tags).map((tag) => (`
                     <span class="card__hashtag-inner">
                       <input type="hidden" name="hashtag" value="${tag}" class="card__hashtag-hidden-input" />
                       <button type="button" class="card__hashtag-name">#${tag}</button>
                       <button type="button" class="card__hashtag-delete">delete</button>
-                    </span>`.trim()
-    ))).join('')}
+                    </span>`.trim()))).join(``)}
                 </div>
     
                 <label>
@@ -121,20 +189,9 @@ export class TaskEdit {
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
-                <input type="radio" id="color-black-5" class="card__color-input card__color-input--black visually-hidden" name="color" value="black" />
-                <label for="color-black-5" class="card__color card__color--black">black</label>
-    
-                <input type="radio" id="color-yellow-5" class="card__color-input card__color-input--yellow visually-hidden" name="color" value="yellow" />
-                <label for="color-yellow-5" class="card__color card__color--yellow">yellow</label>
-    
-                <input type="radio" id="color-blue-5" class="card__color-input card__color-input--blue visually-hidden" name="color" value="blue" />
-                <label for="color-blue-5" class="card__color card__color--blue">blue</label>
-    
-                <input type="radio" id="color-green-5" class="card__color-input card__color-input--green visually-hidden" name="color" value="green" checked />
-                <label for="color-green-5" class="card__color card__color--green">green</label>
-    
-                <input type="radio" id="color-pink-5" class="card__color-input card__color-input--pink visually-hidden" name="color" value="pink" />
-                <label for="color-pink-5" class="card__color card__color--pink">pink</label>
+              
+                ${this._colorVariablesRender(this._id, this._color)}
+               
               </div>
             </div>
           </div>
@@ -153,19 +210,4 @@ export class TaskEdit {
     this.bind();
     return this._element;
   }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
-  }
-
-  bind() {
-    this._element.querySelector(`.card__form`)
-      .addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
-  }
-
-  unbind() {
-    // Удаление обработчиков
-  }
-
 }
