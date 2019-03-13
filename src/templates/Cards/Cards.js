@@ -19,9 +19,6 @@ export const cardRender = ({
     su: false,
   },
   isFavorite = false,
-  isDone = false,
-  isEdit = false,
-  isArchive = false,
 }) => `<article class="card card--${color}">
         <form class="card__form" method="get">
           <div class="card__inner">

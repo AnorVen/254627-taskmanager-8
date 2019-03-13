@@ -21,9 +21,27 @@ function filtersRender(arr) {
 
 function tasksRender(arr) {
   for (let i = 0; i < arr.length; i++) {
-    let firstTask = new Task({i, ...arr[i]});
-    let firstTaskEdit = new TaskEdit({i, ...arr[i]});
-    firstTask.render(BoardTasks);
+    let task = new Task({i, ...arr[i]});
+    let editTask = new TaskEdit({i, ...arr[i]});
+    BoardTasks.appendChild(task.render());
+
+
+    task.onEdit = () => {
+      editTask.render();
+      BoardTasks.replaceChild(editTask.element, task.element);
+      task.unrender();
+    };
+
+    editTask.onSubmit = () => {
+      task.render();
+      BoardTasks.replaceChild(task.element, editTask.element);
+      editTask.unrender();
+    }
+
+
+
+
+
   }
 }
 

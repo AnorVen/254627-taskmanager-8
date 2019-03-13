@@ -1,25 +1,25 @@
 import {createElement} from '../createElement';
 export class TaskEdit {
   constructor({
-                id = 1,
-                color = `black`,
-                title = `таск редактируется...`,
-                dueDate = new Date(),
-                tags = new Set([]),
-                picture = `http://picsum.photos/100/100?r=${Math.random()}`,
-                REPEAT_DAYS = {
-                  mo: false,
-                  tu: false,
-                  we: false,
-                  th: false,
-                  fr: false,
-                  sa: false,
-                  su: false,
-                },
-                isFavorite = false,
-                isDone = false,
-                isArchive = false,
-              }) {
+    id = 1,
+    color = `black`,
+    title = `таск редактируется...`,
+    dueDate = new Date(),
+    tags = new Set([]),
+    picture = `http://picsum.photos/100/100?r=${Math.random()}`,
+    REPEAT_DAYS = {
+      mo: false,
+      tu: false,
+      we: false,
+      th: false,
+      fr: false,
+      sa: false,
+      su: false,
+    },
+    isFavorite = false,
+    isDone = false,
+    isArchive = false,
+  }) {
     this._color = color;
     this._id = id;
     this._title = title;
@@ -42,9 +42,6 @@ export class TaskEdit {
     typeof this._onSubmit === `function` && this._onSubmit();
   }
 
-  _isRepeated() {
-    return Object.values(this._repeatingDays).some(it => it === true);
-  }
 
   set onSubmit(fn) {
     this._onSubmit = fn;
@@ -66,65 +63,12 @@ export class TaskEdit {
     this._element.querySelector(`.card__form`).removeEventListener(`submit`, this._onSubmitButtonClick.bind(this));
   }
 
-  _colorVariablesRender(id, color) {
-    let colors = [`black`, `yellow`, `blue`, `green`, `pink`];
-    let colorVariables = colors.map((item) => (
-      `<input type="radio" id="color-${item}-${id}"
-                    class="card__color-input card__color-input--${item} visually-hidden"
-                    name="color"
-                    value="${item}"
-                    ${item === color ? `checked` : null}
-                  />
-                  <label
-                    for="color-${item}-${this._id}"
-                    class="card__color card__color--${item}"
-                  >${item}</label>`
-    ))
-    return colorVariables.join(``);
-
-  }
-
-  _deadlineRender(dueDate) {
-    let realDate = new Date(dueDate);
-    let hours = realDate.getHours();
-    let minutes = realDate.getMinutes();
-    let tempHTML = `<fieldset class="card__date-deadline">
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__date"
-                        type="text"
-                        placeholder="23 September"
-                        name="date"
-                        value="${realDate.getDate()} ${realDate.getMonth() + 1} ${realDate.getFullYear()}"
-                      />
-                    </label>
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__time"
-                        type="text"
-                        placeholder="11:15 PM"
-                        name="time"
-                        value="${hours > 12 ? (hours - 12) : hours}:${minutes} ${hours > 12 ? `PM` : `AM`}"/>
-                    </label>
-                  </fieldset>`;
-    return tempHTML;
-  }
-
-  _repeatingDaysRender(obj, id) {
-    let tempHTML = ``;
-    for (let key in obj) {
-      tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox"
-        id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" />
-    <label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
-    }
-    return tempHTML;
-  }
-
   get template() {
     return `
     <article class="card card--edit card--blue ${this._isRepeated() ? `card--repeat` : ``}">
       <form class="card__form" method="get">
         <div class="card__inner">
+        <p>taskEdit</p>
           <div class="card__control">
             <button type="button" class="card__btn card__btn--edit">edit</button>
             <button type="button" class="card__btn card__btn--archive">archive</button>
@@ -203,6 +147,59 @@ ${this._dueDate ? this._dueDate : `no`}</span>
         </div>
       </form>
     </article>`.trim();
+  }
+
+  _isRepeated() {
+    return Object.values(this._repeatingDays).some(it => it === true);
+  }
+
+  _colorVariablesRender(id, color) {
+    let colors = [`black`, `yellow`, `blue`, `green`, `pink`];
+    let colorVariables = colors.map((item) => (
+      `<input type="radio" id="color-${item}-${id}"
+                    class="card__color-input card__color-input--${item} visually-hidden"
+                    name="color"
+                    value="${item}"
+                    ${item === color ? `checked` : null}
+                  />
+                  <label
+                    for="color-${item}-${this._id}"
+                    class="card__color card__color--${item}"
+                  >${item}</label>`
+    ));
+    return colorVariables.join(``);
+
+  }
+
+  _deadlineRender(dueDate) {
+    let realDate = new Date(dueDate);
+    let hours = realDate.getHours();
+    let minutes = realDate.getMinutes();
+    return `<fieldset class="card__date-deadline">
+                    <label class="card__input-deadline-wrap">
+                      <input
+                        class="card__date"
+                        type="text"
+                        placeholder="23 September"
+                        name="date"
+                        value="${realDate.getDate()} ${realDate.getMonth() + 1} ${realDate.getFullYear()}"/></label>
+                    <label class="card__input-deadline-wrap">
+                      <input
+                        class="card__time"
+                        type="text"
+                        placeholder="11:15 PM"
+                        name="time"
+                        value="${hours > 12 ? (hours - 12) : hours}:${minutes} ${hours > 12 ? `PM` : `AM`}"/></label></fieldset>`;
+  }
+
+  _repeatingDaysRender(obj, id) {
+    let tempHTML = ``;
+    for (let key in obj) {
+      tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox"
+        id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" />
+    <label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
+    }
+    return tempHTML;
   }
 
   render() {
