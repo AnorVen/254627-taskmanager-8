@@ -67,7 +67,6 @@ export class Task {
     return (`<article class="card card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}" >
           <form class="card__form" method="get">
             <div class="card__inner">
-            <p>task</p>
               <div class="card__control">
                 <button type="button" class="card__btn card__btn--edit">
                   edit
@@ -203,6 +202,13 @@ export class Task {
     let realDate = new Date(dueDate);
     let hours = realDate.getHours();
     let minutes = realDate.getMinutes();
+    let date = realDate.getDate();
+    let month = realDate.getMonth() + 1;
+    let fullYear = realDate.getFullYear();
+    if (hours > 12) {
+      hours = hours - 12;
+    }
+    let timeText = hours > 12 ? `PM` : `AM`;
     return `<fieldset class="card__date-deadline">
                     <label class="card__input-deadline-wrap">
                       <input
@@ -210,18 +216,14 @@ export class Task {
                         type="text"
                         placeholder="23 September"
                         name="date"
-                        value="${realDate.getDate()} ${realDate.getMonth() + 1} ${realDate.getFullYear()}"
-                      />
-                    </label>
+                        value="${date} ${month} ${fullYear}"/></label>
                     <label class="card__input-deadline-wrap">
                       <input
                         class="card__time"
                         type="text"
                         placeholder="11:15 PM"
                         name="time"
-                        value="${hours > 12 ? (hours - 12) : hours}:${minutes} ${hours > 12 ? `PM` : `AM`}"/>
-                    </label>
-                  </fieldset>`;
+                        value="${hours}:${minutes} ${timeText}"/></label></fieldset>`;
   }
   _colorVariablesRender(id, color) {
     let colors = [`black`, `yellow`, `blue`, `green`, `pink`];
