@@ -39,7 +39,9 @@ export class TaskEdit {
 
   _onSubmitButtonClick(evt) {
     evt.preventDefault();
-    typeof this._onSubmit === `function` && this._onSubmit();
+    if (typeof this._onSubmit === `function`) {
+      this._onSubmit();
+    }
   }
 
 
@@ -149,7 +151,7 @@ ${this._dueDate ? this._dueDate : `no`}</span>
   }
 
   _isRepeated() {
-    return Object.values(this._repeatingDays).some(it => it === true);
+    return Object.values(this._repeatingDays).some((it) => it === true);
   }
 
   _colorVariablesRender(id, color) {
@@ -197,13 +199,12 @@ ${this._dueDate ? this._dueDate : `no`}</span>
                         name="time"
                         value="${hours}:${minutes} ${timeText}"/></label></fieldset>`;
   }
-
   _repeatingDaysRender(obj, id) {
     let tempHTML = ``;
     for (let key in obj) {
-      tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox"
-        id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" />
-    <label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" /><label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
+      }
     }
     return tempHTML;
   }

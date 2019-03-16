@@ -44,7 +44,9 @@ export class Task {
   }
 
   _onEditButtonClick() {
-    typeof this._onEdit === `function` && this._onEdit();
+    if (typeof this._onEdit === `function`) {
+      this._onEdit();
+    }
   }
 
   unrender() {
@@ -175,7 +177,9 @@ export class Task {
   _repeatingDaysRender(obj, id) {
     let tempHTML = ``;
     for (let key in obj) {
-      tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" /><label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" /><label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
+      }
     }
     return tempHTML;
   }
