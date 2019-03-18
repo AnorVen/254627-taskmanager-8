@@ -1,6 +1,5 @@
-import {createElement} from '../createElement';
 import Component from './Component';
-export class TaskEdit extends Component{
+export class TaskEdit extends Component {
   constructor({
     id = 1,
     color = `black`,
@@ -60,10 +59,6 @@ export class TaskEdit extends Component{
 
   set onSubmit(fn) {
     this._onSubmit = fn;
-  }
-
-  get element() {
-    return this._element;
   }
 
   get template() {
@@ -165,9 +160,6 @@ ${this._dueDate ? this._dueDate : `no`}</span>
     return tempHTML;
   }
 
-
-
-
   _deadlineRender(dueDate) {
     let realDate = new Date(dueDate);
     let hours = realDate.getHours();
@@ -212,12 +204,5 @@ ${this._dueDate ? this._dueDate : `no`}</span>
     ));
     return colorVariables.join(``);
 
-  }
-
-
-  render() {
-    this._element = createElement(this.template);
-    this.bind();
-    return this._element;
   }
 }

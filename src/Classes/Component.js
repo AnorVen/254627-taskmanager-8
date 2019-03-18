@@ -5,7 +5,6 @@ export default class Component {
     if (new.target === Component) {
       throw new Error(`Can't instantiate BaseComponent, only concrete one.`);
     }
-
     this._element = null;
     this._state = {};
   }
@@ -23,10 +22,17 @@ export default class Component {
     this.bind();
     return this._element;
   }
+  bind() {
+  }
 
-  bind() {}
+  unbind() {
+  }
 
-  unbind() {}
+  createListeners() {
+  }
+
+  removeListeners() {
+  }
 
   unrender() {
     this.unbind();

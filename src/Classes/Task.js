@@ -1,6 +1,5 @@
-import {createElement} from '../createElement';
 import Component from './Component';
-export class Task extends Component{
+export class Task extends Component {
   constructor({
     id = 1,
     color = `black`,
@@ -49,21 +48,12 @@ export class Task extends Component{
       this._onEdit();
     }
   }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
-  }
-
   unbind() {
     this._element.querySelector(`.card__btn--edit`).removeEventListener(`click`, this._onEditButtonClick.bind(this));
   }
 
   set onEdit(fn) {
     this._onEdit = fn;
-  }
-  get element() {
-    return this._element;
   }
 
   get template() {
@@ -246,12 +236,5 @@ export class Task extends Component{
     ));
     return colorVariables.join(``);
 
-  }
-
-
-  render() {
-    this._element = createElement(this.template);
-    this.bind();
-    return this._element;
   }
 }
