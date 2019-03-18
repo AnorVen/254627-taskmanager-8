@@ -1,6 +1,6 @@
 import {createElement} from '../createElement';
-
-export class Task {
+import Component from './Component';
+export class Task extends Component{
   constructor({
     id = 1,
     color = `black`,
@@ -8,7 +8,7 @@ export class Task {
     dueDate = new Date(),
     tags = new Set([]),
     picture = `http://picsum.photos/100/100?r=${Math.random()}`,
-    REPEAT_DAYS = {
+    repeatingDays = {
       mo: false,
       tu: false,
       we: false,
@@ -21,13 +21,14 @@ export class Task {
     isDone = false,
     isArchive = false,
   }) {
+    super();
     this._color = color;
     this._id = id;
     this._title = title;
     this._dueDate = dueDate;
     this._tags = tags;
     this._picture = picture;
-    this._repeatingDays = REPEAT_DAYS;
+    this._repeatingDays = repeatingDays;
     this._isFavorite = isFavorite;
     this._isDone = isDone;
     this._isArchive = isArchive;
