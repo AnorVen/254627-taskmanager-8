@@ -9,7 +9,7 @@ export const cardRender = ({
   dueDate = new Date(),
   tags = new Set([]),
   picture = `http://picsum.photos/100/100?r=${Math.random()}`,
-  REPEAT_DAYS = {
+  repeatingDays = {
     mo: false,
     tu: false,
     we: false,
@@ -68,7 +68,7 @@ export const cardRender = ({
 
                   <fieldset class="card__repeat-days">
                     <div class="card__repeat-days-inner">
-                    ${repeatingDaysRender(REPEAT_DAYS, id)}
+                    ${repeatingDaysRender(repeatingDays, id)}
                    
                     </div>
                   </fieldset>
