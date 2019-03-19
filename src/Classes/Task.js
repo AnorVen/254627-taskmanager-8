@@ -33,10 +33,8 @@ export class Task extends Component {
     this._isArchive = isArchive;
 
     this._element = null;
-    this._state = {
-      isEdit: false
-    };
     this._onEdit = null;
+
   }
 
   bind() {
@@ -55,6 +53,20 @@ export class Task extends Component {
   set onEdit(fn) {
     this._onEdit = fn;
   }
+
+  update(data) {
+    this._color = data.color;
+    this._id = data.id;
+    this._title = data.title;
+    this._dueDate = data.dueDate;
+    this._tags = data.tags;
+    this._picture = data.picture;
+    this._repeatingDays = data.repeatingDays;
+    this._isFavorite = data.isFavorite;
+    this._isDone = data.isDone;
+    this._isArchive = data.isArchive;
+  }
+
 
   get template() {
     return (`<article class="card card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}" >
@@ -221,8 +233,8 @@ export class Task extends Component {
                         value="${hours}:${minutes} ${timeText}"/></label></fieldset>`;
   }
   _colorVariablesRender(id, color) {
-    let colors = [`black`, `yellow`, `blue`, `green`, `pink`];
-    let colorVariables = colors.map((item) => (
+
+    let colorVariables = this._colors.map((item) => (
       `<input type="radio" id="color-${item}-${id}"
                     class="card__color-input card__color-input--${item} visually-hidden"
                     name="color"
