@@ -1,5 +1,5 @@
-import {createElement} from '../createElement';
-export class TaskEdit {
+import Component from './Component';
+export class TaskEdit extends Component {
   constructor({
     id = 1,
     color = `black`,
@@ -7,7 +7,7 @@ export class TaskEdit {
     dueDate = new Date(),
     tags = new Set([]),
     picture = `http://picsum.photos/100/100?r=${Math.random()}`,
-    REPEAT_DAYS = {
+    repeatingDays = {
       mo: false,
       tu: false,
       we: false,
@@ -20,13 +20,14 @@ export class TaskEdit {
     isDone = false,
     isArchive = false,
   }) {
+    super();
     this._color = color;
     this._id = id;
     this._title = title;
     this._dueDate = dueDate;
     this._tags = tags;
     this._picture = picture;
-    this._repeatingDays = REPEAT_DAYS;
+    this._repeatingDays = repeatingDays;
     this._isFavorite = isFavorite;
     this._isDone = isDone;
     this._isArchive = isArchive;
@@ -37,32 +38,27 @@ export class TaskEdit {
     };
   }
 
+
+  bind() {
+    this._element.querySelector(`.card__form`).addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
+  }
   _onSubmitButtonClick(evt) {
     evt.preventDefault();
     if (typeof this._onSubmit === `function`) {
       this._onSubmit();
     }
   }
-
-
-  set onSubmit(fn) {
-    this._onSubmit = fn;
-  }
-
-  get element() {
-    return this._element;
-  }
   unrender() {
     this.unbind();
     this._element = null;
   }
 
-  bind() {
-    this._element.querySelector(`.card__form`).addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
-  }
-
   unbind() {
     this._element.querySelector(`.card__form`).removeEventListener(`submit`, this._onSubmitButtonClick.bind(this));
+  }
+
+  set onSubmit(fn) {
+    this._onSubmit = fn;
   }
 
   get template() {
@@ -154,22 +150,14 @@ ${this._dueDate ? this._dueDate : `no`}</span>
     return Object.values(this._repeatingDays).some((it) => it === true);
   }
 
-  _colorVariablesRender(id, color) {
-    let colors = [`black`, `yellow`, `blue`, `green`, `pink`];
-    let colorVariables = colors.map((item) => (
-      `<input type="radio" id="color-${item}-${id}"
-                    class="card__color-input card__color-input--${item} visually-hidden"
-                    name="color"
-                    value="${item}"
-                    ${item === color ? `checked` : null}
-                  />
-                  <label
-                    for="color-${item}-${this._id}"
-                    class="card__color card__color--${item}"
-                  >${item}</label>`
-    ));
-    return colorVariables.join(``);
-
+  _repeatingDaysRender(obj, id) {
+    let tempHTML = ``;
+    for (let key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" /><label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
+      }
+    }
+    return tempHTML;
   }
 
   _deadlineRender(dueDate) {
@@ -199,19 +187,22 @@ ${this._dueDate ? this._dueDate : `no`}</span>
                         name="time"
                         value="${hours}:${minutes} ${timeText}"/></label></fieldset>`;
   }
-  _repeatingDaysRender(obj, id) {
-    let tempHTML = ``;
-    for (let key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" /><label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
-      }
-    }
-    return tempHTML;
-  }
 
-  render() {
-    this._element = createElement(this.template);
-    this.bind();
-    return this._element;
+  _colorVariablesRender(id, color) {
+    let colors = [`black`, `yellow`, `blue`, `green`, `pink`];
+    let colorVariables = colors.map((item) => (
+      `<input type="radio" id="color-${item}-${id}"
+                    class="card__color-input card__color-input--${item} visually-hidden"
+                    name="color"
+                    value="${item}"
+                    ${item === color ? `checked` : null}
+                  />
+                  <label
+                    for="color-${item}-${this._id}"
+                    class="card__color card__color--${item}"
+                  >${item}</label>`
+    ));
+    return colorVariables.join(``);
+
   }
 }
