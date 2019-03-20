@@ -71,6 +71,7 @@ export class Task extends Component {
   get template() {
     return (`<article class="card card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}" >
           <form class="card__form" method="get">
+          <input type="hidden" value="${this._id}" class="hidden" name="id">
             <div class="card__inner">
               <div class="card__control">
                 <button type="button" class="card__btn card__btn--edit">

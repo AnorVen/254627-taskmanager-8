@@ -41,7 +41,7 @@ export class TaskEdit extends Component {
     this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
     this._onChangeDate = this._onChangeDate.bind(this);
     this._onChangeRepeated = this._onChangeRepeated.bind(this);
-
+debugger
   }
 
   update(data) {
@@ -119,7 +119,8 @@ export class TaskEdit extends Component {
       isFavorite: false,
       _isDone: false,
       _isArchive: false,
-      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
+      picture: ``,
+      id: this._id,
       repeatingDays: {
         'mo': false,
         'tu': false,
@@ -137,12 +138,15 @@ export class TaskEdit extends Component {
         taskEditMapper[property](value);
       }
     }
+    debugger
     return entry;
   }
 
 
   static createMapper(target) {
     return {
+      id: (value) => (target.id = value),
+      picture: (value) => (target.picture = value),
       hashtag: (value) => (target.tags.add(value)),
       text: (value) => (target.title = value),
       color: (value) => (target.color = value),
@@ -180,19 +184,6 @@ export class TaskEdit extends Component {
     this._element.innerHTML = this.template;
   }
 
-  update(data) {
-    this._title = data.title;
-    this._tags = data.tags;
-    this._color = data.color;
-    this._repeatingDays = data.repeatingDays;
-    this._dueDate = data.dueDate;
-    this._id = data.id;
-    this._picture = data.picture;
-    this._isFavorite = data.isFavorite;
-    this._isDone = data.isDone;
-    this._isArchive = data.isArchive;
-  }
-
   get template() {
     return `
     <article class="card card--edit card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}">
@@ -201,7 +192,10 @@ export class TaskEdit extends Component {
           <div class="card__control">
             <button type="button" class="card__btn card__btn--edit">edit</button>
             <button type="button" class="card__btn card__btn--archive">archive</button>
-            <button type="button" class="card__btn card__btn--favorites ${this._isFavorite ? null : `card__btn--disabled`}">favorites</button>
+            <button type="button" 
+                    class="card__btn card__btn--favorites 
+                    ${this._isFavorite ? 
+                    null : `card__btn--disabled`}">favorites</button>
             </div>
       
             <div class="card__color-bar">
@@ -212,7 +206,9 @@ export class TaskEdit extends Component {
       
             <div class="card__textarea-wrap">
               <label>
-                <textarea class="card__text" placeholder="Start typing your text here..." name="text">${this._title}</textarea>
+                <textarea class="card__text"
+                 placeholder="Start typing your text here..." 
+                 name="text">${this._title}</textarea>
             </label>
           </div>
     
@@ -252,13 +248,21 @@ ${this._repeatingDaysRender(this._repeatingDays, this._id)}
                 </div>
     
                 <label>
-                  <input type="text" class="card__hashtag-input" name="hashtag-input" placeholder="Type new hashtag here" />
+               
+                 <input 
+                    type="text"
+                    class="card__hashtag-input" 
+                    name="hashtag-input" 
+                    placeholder="Type new hashtag here" />
                 </label>
               </div>
             </div>
     
             <label class="card__img-wrap card__img-wrap--empty">
-              <input type="file" class="card__img-input visually-hidden" name="img" />
+              <input type="file"
+               class="card__img-input visually-hidden"
+               value="${this._picture}"
+               name="picture" />
             </label>
     
             <div class="card__colors-inner">
@@ -288,12 +292,14 @@ ${this._repeatingDaysRender(this._repeatingDays, this._id)}
     let tempHTML = ``;
     for (let key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${obj[key]}-${id}" name="" value="${obj[key]}" /><label class="card__repeat-day" for="repeat-mo-${id}" ${key ? `checked` : null} >${obj[key]}</label>`;
+        tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${key}-${id}" name="" value="${key}" />
+<label class="card__repeat-day" for="repeat-${key}-${id}" ${obj[key] ? `checked` : null} >${key}</label>`;
       }
     }
     return tempHTML;
   }
 
+  // TODO добавить валью в инпут тегов
   _deadlineRender(dueDate) {
     let realDate = new Date(dueDate);
     let hours = realDate.getHours();
@@ -305,22 +311,6 @@ ${this._repeatingDaysRender(this._repeatingDays, this._id)}
       hours = hours - 12;
     }
     let timeText = hours > 12 ? `PM` : `AM`;
-    /*return `<fieldset class="card__date-deadline">
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__date"
-                        type="text"
-                        placeholder="23 September"
-                        name="date"
-                        value="${date} ${month} ${fullYear}"/></label>
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__time"
-                        type="text"
-                        placeholder="11:15 PM"
-                        name="time"
-                        value="${hours}:${minutes} ${timeText}"/></label></fieldset>`;*/
-
     return `
     <fieldset class="card__date-deadline" ${!this._state.isDate ? `disabled` : null}>
                     <label class="card__input-deadline-wrap">
@@ -335,15 +325,16 @@ ${this._repeatingDaysRender(this._repeatingDays, this._id)}
 
   _colorVariablesRender(id, color) {
     let colorVariables = this._colors.map((item) => (
-      `<input type="radio" id="color-${item}-${id}"
-                    class="card__color-input card__color-input--${item} visually-hidden"
-                    name="color"
-                    ${item === color ? `checked` : null}
-                  />
-                  <label
-                    for="color-${item}-${this._id}"
-                    class="card__color card__color--${item}"
-                  >${item}</label>`
+      `<input type="radio"
+              id="color-${item}-${id}"
+              class="card__color-input card__color-input--${item} visually-hidden"
+              name="color"
+              value="${item}"
+              ${item === color ? `checked` : null}
+              />
+      <label for="color-${item}-${this._id}"
+             class="card__color card__color--${item}"
+             >${item}</label>`
     ));
     return colorVariables.join(``);
 

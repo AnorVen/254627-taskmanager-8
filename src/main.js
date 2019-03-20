@@ -20,9 +20,10 @@ function filtersRender(arr) {
 }
 
 function tasksRender(arr) {
-  for (let i = 0; i < arr.length; i++) {
-    let taskComponent = new Task({i, ...arr[i]});
-    let editTaskComponent = new TaskEdit({i, ...arr[i]});
+  //for (let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < 2; i++) {
+    let taskComponent = new Task({id: i, ...arr[i]});
+    let editTaskComponent = new TaskEdit({id: i, ...arr[i]});
     BoardTasks.appendChild(taskComponent.render());
 
 
@@ -39,12 +40,13 @@ function tasksRender(arr) {
       task.color = newObject.color;
       task.repeatingDays = newObject.repeatingDays;
       task.dueDate = newObject.dueDate;
-      task.id = i;
+      task.id = newObject.id;
       task.picture = newObject.picture;
       task.isFavorite = false;
       task.isDone  = false;
       task.isArchive  = false;
 
+      debugger
       taskComponent.update(task);
       taskComponent.render();
       BoardTasks.replaceChild(taskComponent.element, editTaskComponent.element);
