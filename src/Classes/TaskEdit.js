@@ -2,24 +2,17 @@ import Component from './Component';
 import flatpickr from 'flatpickr';
 export class TaskEdit extends Component {
   constructor({
-    id = 1,
-    color = `black`,
-    title = `таск редактируется...`,
-    dueDate = new Date(),
-    tags = new Set([]),
-    picture = `http://picsum.photos/100/100?r=${Math.random()}`,
-    repeatingDays = {
-      mo: false,
-      tu: false,
-      we: false,
-      th: false,
-      fr: false,
-      sa: false,
-      su: false,
-    },
-    isFavorite = false,
-    isDone = false,
-    isArchive = false,
+    id,
+    color,
+    title,
+    dueDate,
+    tags,
+    picture,
+    repeatingDays,
+    isFavorite,
+    isDone,
+    isArchive,
+
   }) {
     super();
     this._color = color;
@@ -33,15 +26,13 @@ export class TaskEdit extends Component {
     this._isDone = isDone;
     this._isArchive = isArchive;
 
+
     this._element = null;
-
     this._state.isDate = false;
-    this._state.isRepeated = false;
-
     this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
     this._onChangeDate = this._onChangeDate.bind(this);
     this._onChangeRepeated = this._onChangeRepeated.bind(this);
-debugger
+    this._state.isRepeated = this._isRepeated();
   }
 
   update(data) {
@@ -55,21 +46,9 @@ debugger
     this._isFavorite = data.isFavorite;
     this._isDone = data.isDone;
     this._isArchive = data.isArchive;
+ //   debugger
   }
 
-  _onChangeDate() {
-    this._state.isDate = !this._state.isDate;
-    this.unbind();
-    this._partialUpdate();
-    this.bind();
-  }
-
-  _onChangeRepeated() {
-    this._state.isRepeated = !this._state.isRepeated;
-    this.unbind();
-    this._partialUpdate();
-    this.bind();
-  }
   bind() {
     this._element.querySelector(`.card__form`)
       .addEventListener(`submit`, this._onSubmitButtonClick);
@@ -88,8 +67,6 @@ debugger
   unbind() {
     this._element.querySelector(`.card__form`)
       .removeEventListener(`submit`, this._onSubmitButtonClick);
-    this._element.querySelector(`.card__form`)
-      .removeEventListener(`submit`, this._onSubmitButtonClick);
     this._element.querySelector(`.card__date-deadline-toggle`)
       .removeEventListener(`click`, this._onChangeDate);
     this._element.querySelector(`.card__repeat-toggle`)
@@ -103,6 +80,7 @@ debugger
     evt.preventDefault();
     const formData = new FormData(this._element.querySelector(`.card__form`));
     const newData = this._processForm(formData);
+ //   debugger
     if (typeof this._onSubmit === `function`) {
       this._onSubmit(newData);
     }
@@ -120,7 +98,7 @@ debugger
       _isDone: false,
       _isArchive: false,
       picture: ``,
-      id: this._id,
+      id: ``,
       repeatingDays: {
         'mo': false,
         'tu': false,
@@ -138,15 +116,19 @@ debugger
         taskEditMapper[property](value);
       }
     }
-    debugger
     return entry;
   }
-
+  // TODO picture -    ????
+  //  picture: (value) => {
+  //         console.log(value)
+  //         return (target.picture = typeof value === `File` ?
+  //           (value.webkitRelativePath + value.name) : value);
+  //       },
 
   static createMapper(target) {
     return {
       id: (value) => (target.id = value),
-      picture: (value) => (target.picture = value),
+      picture: (value) =>(target.picture = value),
       hashtag: (value) => (target.tags.add(value)),
       text: (value) => (target.title = value),
       color: (value) => (target.color = value),
@@ -188,14 +170,15 @@ debugger
     return `
     <article class="card card--edit card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}">
       <form class="card__form" method="get">
+          <input type="hidden" value="${this._id}" class="hidden" name="id">
         <div class="card__inner">
           <div class="card__control">
             <button type="button" class="card__btn card__btn--edit">edit</button>
             <button type="button" class="card__btn card__btn--archive">archive</button>
             <button type="button" 
                     class="card__btn card__btn--favorites 
-                    ${this._isFavorite ? 
-                    null : `card__btn--disabled`}">favorites</button>
+                    ${this._isFavorite ? null : `card__btn--disabled`}">
+                    favorites</button>
             </div>
       
             <div class="card__color-bar">
@@ -257,12 +240,18 @@ ${this._repeatingDaysRender(this._repeatingDays, this._id)}
                 </label>
               </div>
             </div>
-    
-            <label class="card__img-wrap card__img-wrap--empty">
-              <input type="file"
-               class="card__img-input visually-hidden"
-               value="${this._picture}"
-               name="picture" />
+              <label class="card__img-wrap ${this._picture ? `` : `card__img-wrap--empty`} ">
+              <input 
+                type="file"            
+                class="card__img-input visually-hidden"
+                name="picture"
+                 value 
+                 />
+              <img
+                      src="${this._picture || `img/sample-img.jpg`} "
+                      alt="task picture"
+                      class="card__img"
+                    />
             </label>
     
             <div class="card__colors-inner">
@@ -285,15 +274,28 @@ ${this._repeatingDaysRender(this._repeatingDays, this._id)}
   }
 
   _isRepeated() {
+    console.log(this._repeatingDays)
+    console.log(Object.values(this._repeatingDays))
+    console.log(Object.values(this._repeatingDays).some((it) => it === true))
+
     return Object.values(this._repeatingDays).some((it) => it === true);
+
   }
 
   _repeatingDaysRender(obj, id) {
     let tempHTML = ``;
     for (let key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        tempHTML += `<input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-${key}-${id}" name="" value="${key}" />
-<label class="card__repeat-day" for="repeat-${key}-${id}" ${obj[key] ? `checked` : null} >${key}</label>`;
+        tempHTML += `
+          <input class="visually-hidden card__repeat-day-input" 
+          type="checkbox" 
+          id="repeat-${key}-${id}" 
+          name="repeat" 
+          value="${key}"
+          ${obj[key] ? `checked` : null}
+               />
+          <label class="card__repeat-day" 
+                for="repeat-${key}-${id}" >${key}</label>`;
       }
     }
     return tempHTML;
@@ -301,16 +303,6 @@ ${this._repeatingDaysRender(this._repeatingDays, this._id)}
 
   // TODO добавить валью в инпут тегов
   _deadlineRender(dueDate) {
-    let realDate = new Date(dueDate);
-    let hours = realDate.getHours();
-    let minutes = realDate.getMinutes();
-    let date = realDate.getDate();
-    let month = realDate.getMonth() + 1;
-    let fullYear = realDate.getFullYear();
-    if (hours > 12) {
-      hours = hours - 12;
-    }
-    let timeText = hours > 12 ? `PM` : `AM`;
     return `
     <fieldset class="card__date-deadline" ${!this._state.isDate ? `disabled` : null}>
                     <label class="card__input-deadline-wrap">

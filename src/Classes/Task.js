@@ -55,6 +55,8 @@ export class Task extends Component {
   }
 
   update(data) {
+    console.log(data)
+    console.log(data.picture)
     this._color = data.color;
     this._id = data.id;
     this._title = data.title;
