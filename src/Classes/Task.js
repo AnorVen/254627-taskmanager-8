@@ -55,8 +55,6 @@ export class Task extends Component {
   }
 
   update(data) {
-    console.log(data)
-    console.log(data.picture)
     this._color = data.color;
     this._id = data.id;
     this._title = data.title;
@@ -112,7 +110,21 @@ export class Task extends Component {
                     date: <span class="card__date-status">${this._dueDate ? this._dueDate : `no`}</span>
                   </button>
 
-                  ${this._deadlineRender(this._dueDate)}
+                 <fieldset class="card__date-deadline" ${!this._state.isDate && `disabled`}>
+                      <label class="card__input-deadline-wrap">
+                        <input
+                          class="card__date"
+                          type="text"
+                          placeholder="23 September"
+                          name="date"
+                          /></label>
+                    <label class="card__input-deadline-wrap">
+                      <input
+                        class="card__time"
+                        type="text"
+                        placeholder="11:15 PM"
+                        name="time"
+                        /></label></fieldset>
 
                   <button class="card__repeat-toggle" type="button">
                     repeat:<span class="card__repeat-status">no</span>
@@ -206,34 +218,6 @@ export class Task extends Component {
     <button type="button" class="card__hashtag-name">#${tag}</button>
     <button type="button" class="card__hashtag-delete">delete</button>
     </span>`.trim()).join(``));
-  }
-
-  _deadlineRender(dueDate) {
-    let realDate = new Date(dueDate);
-    let hours = realDate.getHours();
-    let minutes = realDate.getMinutes();
-    let date = realDate.getDate();
-    let month = realDate.getMonth() + 1;
-    let fullYear = realDate.getFullYear();
-    if (hours > 12) {
-      hours = hours - 12;
-    }
-    let timeText = hours > 12 ? `PM` : `AM`;
-    return `<fieldset class="card__date-deadline">
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__date"
-                        type="text"
-                        placeholder="23 September"
-                        name="date"
-                        value="${date} ${month} ${fullYear}"/></label>
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__time"
-                        type="text"
-                        placeholder="11:15 PM"
-                        name="time"
-                        value="${hours}:${minutes} ${timeText}"/></label></fieldset>`;
   }
   _colorVariablesRender(id, color) {
 

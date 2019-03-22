@@ -45,7 +45,7 @@ function tasksRender(arr) {
       task.isFavorite = false;
       task.isDone  = false;
       task.isArchive  = false;
-
+debugger
       taskComponent.update(task);
       taskComponent.render();
       BoardTasks.replaceChild(taskComponent.element, editTaskComponent.element);
