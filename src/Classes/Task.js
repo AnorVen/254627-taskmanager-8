@@ -99,7 +99,8 @@ export class Task extends Component {
                       class="card__text"
                       placeholder="Start typing your text here..."
                       name="text"
-                    >${this._title}</textarea>
+                    >    ${this._dueDate}
+${this._title}</textarea>
               </label>
             </div>
 
