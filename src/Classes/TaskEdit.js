@@ -148,10 +148,7 @@ export class TaskEdit extends Component {
       hours = +hours + 12;
     }
     this._dueDate.hour(hours).minute(minutes);
-
-    this.unbind();
-    this._partialUpdate();
-    this.bind();
+    this.reRender();
   }
 
   _changeDataInput() {
@@ -162,17 +159,13 @@ export class TaskEdit extends Component {
     const value = this._element.querySelector(`.card__date`).value;
     const [date, month] = value.split(` `);
     this._dueDate = this._dueDate.date(date).month(month);
-    this.unbind();
-    this._partialUpdate();
-    this.bind();
+    this.reRender();
   }
 
   _onAddHashtags(e) {
     e.preventDefault();
     this._tags = this._tags.add(e.target.value);
-    this.unbind();
-    this._partialUpdate();
-    this.bind();
+    this.reRender();
   }
 
   _onChangeHashtags(e) {
@@ -192,9 +185,7 @@ export class TaskEdit extends Component {
     while (target !== this._element.querySelector(`.card__hashtag-list`)) {
       if (target.className === `card__hashtag-delete`) {
         this._deleteHashtag(e.target.dataset.name);
-        this.unbind();
-        this._partialUpdate();
-        this.bind();
+        this.reRender();
         return;
       }
       target = target.parentNode;
@@ -217,9 +208,7 @@ export class TaskEdit extends Component {
 
   _onChangePicture(e) {
     this._picture = e.target.value;
-    this.unbind();
-    this._partialUpdate();
-    this.bind();
+    this.reRender();
   }
 
   _processForm(formData) {
@@ -300,18 +289,20 @@ export class TaskEdit extends Component {
     this._onSubmit = fn;
   }
 
-  _onChangeDate() {
-    this._state.isDate = !this._state.isDate;
+  reRender() {
     this.unbind();
     this._partialUpdate();
     this.bind();
   }
 
+  _onChangeDate() {
+    this._state.isDate = !this._state.isDate;
+    this.reRender();
+  }
+
   _onChangeRepeated() {
     this._state.isRepeated = !this._state.isRepeated;
-    this.unbind();
-    this._partialUpdate();
-    this.bind();
+    this.reRender();
   }
 
   _partialUpdate() {
@@ -343,7 +334,7 @@ export class TaskEdit extends Component {
               <label>
                 <textarea class="card__text"
                  placeholder="Start typing your text here..." 
-                 name="text">${this._dueDate}${this._title} </textarea>
+                 name="text">${this._title}</textarea>
             </label>
           </div>
     

@@ -3,7 +3,7 @@ export const CARD_VARIABLES = {
   title: [`Изучить теорию`,
     `Сделать домашку`,
     `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-  dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000),
+  dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * (Math.floor(Math.random() * 24)) * (Math.floor(Math.random() * 60)) * 60 * 1000),
   tags: new Set([
     `cinema`,
     `entertainment`,
@@ -70,7 +70,7 @@ export const Database = {
       title: [`Изучить теорию`,
         `Сделать домашку`,
         `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-      dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * (Math.floor(Math.random() * 24)) * (Math.floor(Math.random() * 60)) * 60 * 1000),
+      dueDate: CARD_VARIABLES.dueDate,
       tags: new Set([
         `cinema`,
         `entertainment`,

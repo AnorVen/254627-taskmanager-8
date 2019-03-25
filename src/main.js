@@ -20,8 +20,7 @@ function filtersRender(arr) {
 }
 
 function tasksRender(arr) {
-  //for (let i = 0; i < arr.length; i++) {
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 4; i++) {
     let taskComponent = new Task({id: i, ...arr[i]});
     let editTaskComponent = new TaskEdit({id: i, ...arr[i]});
     BoardTasks.appendChild(taskComponent.render());
