@@ -7,6 +7,7 @@ export default class Component {
     }
     this._element = null;
     this._state = {};
+    this._colors = [`black`, `yellow`, `blue`, `green`, `pink`];
   }
 
   get element() {
@@ -27,12 +28,7 @@ export default class Component {
 
   unbind() {
   }
-
-  createListeners() {
-  }
-
-  removeListeners() {
-  }
+  update() {}
 
   unrender() {
     this.unbind();

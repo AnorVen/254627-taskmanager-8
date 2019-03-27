@@ -33,10 +33,8 @@ export class Task extends Component {
     this._isArchive = isArchive;
 
     this._element = null;
-    this._state = {
-      isEdit: false
-    };
     this._onEdit = null;
+
   }
 
   bind() {
@@ -56,9 +54,24 @@ export class Task extends Component {
     this._onEdit = fn;
   }
 
+  update(data) {
+    this._color = data.color;
+    this._id = data.id;
+    this._title = data.title;
+    this._dueDate = data.dueDate;
+    this._tags = data.tags;
+    this._picture = data.picture;
+    this._repeatingDays = data.repeatingDays;
+    this._isFavorite = data.isFavorite;
+    this._isDone = data.isDone;
+    this._isArchive = data.isArchive;
+  }
+
+
   get template() {
     return (`<article class="card card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}" >
           <form class="card__form" method="get">
+          <input type="hidden" value="${this._id}" class="hidden" name="id">
             <div class="card__inner">
               <div class="card__control">
                 <button type="button" class="card__btn card__btn--edit">
@@ -97,7 +110,21 @@ export class Task extends Component {
                     date: <span class="card__date-status">${this._dueDate ? this._dueDate : `no`}</span>
                   </button>
 
-                  ${this._deadlineRender(this._dueDate)}
+                 <fieldset class="card__date-deadline" ${!this._state.isDate && `disabled`}>
+                      <label class="card__input-deadline-wrap">
+                        <input
+                          class="card__date"
+                          type="text"
+                          placeholder="23 September"
+                          name="date"
+                          /></label>
+                    <label class="card__input-deadline-wrap">
+                      <input
+                        class="card__time"
+                        type="text"
+                        placeholder="11:15 PM"
+                        name="time"
+                        /></label></fieldset>
 
                   <button class="card__repeat-toggle" type="button">
                     repeat:<span class="card__repeat-status">no</span>
@@ -192,37 +219,9 @@ export class Task extends Component {
     <button type="button" class="card__hashtag-delete">delete</button>
     </span>`.trim()).join(``));
   }
-
-  _deadlineRender(dueDate) {
-    let realDate = new Date(dueDate);
-    let hours = realDate.getHours();
-    let minutes = realDate.getMinutes();
-    let date = realDate.getDate();
-    let month = realDate.getMonth() + 1;
-    let fullYear = realDate.getFullYear();
-    if (hours > 12) {
-      hours = hours - 12;
-    }
-    let timeText = hours > 12 ? `PM` : `AM`;
-    return `<fieldset class="card__date-deadline">
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__date"
-                        type="text"
-                        placeholder="23 September"
-                        name="date"
-                        value="${date} ${month} ${fullYear}"/></label>
-                    <label class="card__input-deadline-wrap">
-                      <input
-                        class="card__time"
-                        type="text"
-                        placeholder="11:15 PM"
-                        name="time"
-                        value="${hours}:${minutes} ${timeText}"/></label></fieldset>`;
-  }
   _colorVariablesRender(id, color) {
-    let colors = [`black`, `yellow`, `blue`, `green`, `pink`];
-    let colorVariables = colors.map((item) => (
+
+    let colorVariables = this._colors.map((item) => (
       `<input type="radio" id="color-${item}-${id}"
                     class="card__color-input card__color-input--${item} visually-hidden"
                     name="color"

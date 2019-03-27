@@ -20,28 +20,36 @@ function filtersRender(arr) {
 }
 
 function tasksRender(arr) {
-  for (let i = 0; i < arr.length; i++) {
-    let task = new Task({i, ...arr[i]});
-    let editTask = new TaskEdit({i, ...arr[i]});
-    BoardTasks.appendChild(task.render());
+  for (let i = 0; i < 4; i++) {
+    let taskComponent = new Task({id: i, ...arr[i]});
+    let editTaskComponent = new TaskEdit({id: i, ...arr[i]});
+    BoardTasks.appendChild(taskComponent.render());
 
 
-    task.onEdit = () => {
-      editTask.render();
-      BoardTasks.replaceChild(editTask.element, task.element);
-      task.unrender();
+    taskComponent.onEdit = () => {
+      editTaskComponent.render();
+      BoardTasks.replaceChild(editTaskComponent.element, taskComponent.element);
+      taskComponent.unrender();
     };
 
-    editTask.onSubmit = () => {
-      task.render();
-      BoardTasks.replaceChild(task.element, editTask.element);
-      editTask.unrender();
+    editTaskComponent.onSubmit = (newObject) => {
+      let task ={};
+      task.title = newObject.title;
+      task.tags = newObject.tags;
+      task.color = newObject.color;
+      task.repeatingDays = newObject.repeatingDays;
+      task.dueDate = newObject.dueDate;
+      task.id = newObject.id;
+      task.picture = newObject.picture;
+      task.isFavorite = false;
+      task.isDone  = false;
+      task.isArchive  = false;
+
+      taskComponent.update(task);
+      taskComponent.render();
+      BoardTasks.replaceChild(taskComponent.element, editTaskComponent.element);
+      editTaskComponent.unrender();
     }
-
-
-
-
-
   }
 }
 
@@ -50,8 +58,7 @@ function randomCard() {
   let tempBlock = ``;
   for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
     let color = CARD_VARIABLES.COLOR[Object.keys(CARD_VARIABLES.COLOR)[Math.floor(Math.random() * Object.keys(CARD_VARIABLES.COLOR).length)]];
-    let id = i;
-    tempBlock += cardRender({color, id});
+    tempBlock += cardRender({color, i});
   }
   BoardTasks.insertAdjacentHTML(`beforeend`, tempBlock);
 }
