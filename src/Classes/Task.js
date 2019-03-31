@@ -19,6 +19,7 @@ export class Task extends Component {
     isFavorite = false,
     isDone = false,
     isArchive = false,
+    deleted = false,
   }) {
     super();
     this._color = color;
@@ -31,6 +32,7 @@ export class Task extends Component {
     this._isFavorite = isFavorite;
     this._isDone = isDone;
     this._isArchive = isArchive;
+    this.deleted = deleted;
 
     this._element = null;
     this._onEdit = null;

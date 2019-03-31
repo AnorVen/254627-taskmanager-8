@@ -27,7 +27,9 @@ export class TaskEdit extends Component {
     this._isDone = isDone;
     this._isArchive = isArchive;
     this._element = null;
+    this._onDelete = null;
 
+    this._onDeleteButtonClick = this._onDeleteButtonClick.bind(this);
     this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
     this._onChangeDate = this._onChangeDate.bind(this);
     this._onChangeRepeated = this._onChangeRepeated.bind(this);
@@ -38,6 +40,8 @@ export class TaskEdit extends Component {
     this._deleteHashtag = this._deleteHashtag.bind(this);
     this._changeDataInput = this._changeDataInput.bind(this);
     this._changeTimeInput = this._changeTimeInput.bind(this);
+    this.unrender = this.unrender.bind(this);
+    this.unbind = this.unbind.bind(this);
 
     this._state.isRepeated = this._isRepeated();
     this._state.isDate = !!this._dueDate;
@@ -54,7 +58,6 @@ export class TaskEdit extends Component {
     this._isFavorite = data.isFavorite;
     this._isDone = data.isDone;
     this._isArchive = data.isArchive;
-    //   debugger
   }
 
   bind() {
@@ -83,6 +86,8 @@ export class TaskEdit extends Component {
       .addEventListener(`change`, this._changeDataInput);
     this._element.querySelector(`.card__time`)
       .addEventListener(`change`, this._changeTimeInput);
+    this._element.querySelector(`.card__delete`)
+      .addEventListener(`click`, this._onDeleteButtonClick);
 
     if (this._state.isDate) {
       flatpickr(
@@ -108,31 +113,37 @@ export class TaskEdit extends Component {
 
 
   unbind() {
-    this._element
-      .querySelector(`.card__form`)
+    this._element.querySelector(`.card__form`)
       .removeEventListener(`submit`, this._onSubmitButtonClick);
-    this._element
-      .querySelector(`.card__date-deadline-toggle`)
+    this._element.querySelector(`.card__date-deadline-toggle`)
       .removeEventListener(`click`, this._onChangeDate);
-    this._element
-      .querySelector(`.card__repeat-toggle`)
+    this._element.querySelector(`.card__repeat-toggle`)
       .removeEventListener(`click`, this._onChangeRepeated);
-    this._element
-      .querySelector(`.card__img-input`)
+    this._element.querySelector(`.card__img-input`)
       .removeEventListener(`click`, this._onChangePicture);
-    this._element
-      .querySelector(`.card__hashtag-input`)
+    this._element.querySelector(`.card__hashtag-input`)
       .removeEventListener(`change`, this._onAddHashtags);
-    this._element
-      .querySelector(`.card__hashtag-list`)
+    this._element.querySelector(`.card__hashtag-list`)
       .removeEventListener(`click`, this._onChangeHashtags);
-    this._element
-      .querySelector(`.card__hashtag-list`)
+    this._element.querySelector(`.card__hashtag-list`)
       .removeEventListener(`click`, this._onDeleteHashtags);
     this._element.querySelector(`.card__date`)
       .removeEventListener(`change`, this._changeDataInput);
     this._element.querySelector(`.card__time`)
       .removeEventListener(`change`, this._changeTimeInput);
+    this._element.querySelector(`.card__delete`)
+      .removeEventListener(`click`, this._onDeleteButtonClick);
+  }
+
+
+  _onDeleteButtonClick() {
+    if (typeof this._onDelete === `function`) {
+      this._onDelete();
+    }
+  }
+
+  set onDelete(fn) {
+    this._onDelete = fn;
   }
 
   _changeTimeInput() {

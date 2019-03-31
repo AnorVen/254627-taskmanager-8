@@ -1,4 +1,3 @@
-
 import {Filter} from './Classes/Filter';
 import {TaskEdit} from './Classes/TaskEdit';
 import {Task} from './Classes/Task';
@@ -7,6 +6,11 @@ import {Database as DB, CARD_VARIABLES} from './database/Database';
 
 const BoardTasks = document.querySelector(`.board__tasks`);
 const MainFilter = document.querySelector(`.main__filter`);
+
+const deleteTask = (tasks, i) => {
+  tasks.splice(i, 1);
+  return tasks;
+};
 
 function filtersRender(arr) {
   let tempBlock = ``;
@@ -19,10 +23,10 @@ function filtersRender(arr) {
   MainFilter.addEventListener(`click`, clickOnFilterHandler);
 }
 
-function tasksRender(arr) {
-  for (let i = 0; i < 4; i++) {
-    let taskComponent = new Task({id: i, ...arr[i]});
-    let editTaskComponent = new TaskEdit({id: i, ...arr[i]});
+function tasksRender(tasks) {
+  for (let i = 0; i < 3; i++) {
+    let taskComponent = new Task({id: i, ...tasks[i]});
+    let editTaskComponent = new TaskEdit({id: i, ...tasks[i]});
     BoardTasks.appendChild(taskComponent.render());
 
 
@@ -30,6 +34,13 @@ function tasksRender(arr) {
       editTaskComponent.render();
       BoardTasks.replaceChild(editTaskComponent.element, taskComponent.element);
       taskComponent.unrender();
+    };
+    editTaskComponent.onDelete = () =>{
+      deleteTask(tasks, i);
+      console.log(this)
+      console.log(editTaskComponent)
+      console.log(editTaskComponent.unrender)
+      editTaskComponent.unrender();
     };
 
     editTaskComponent.onSubmit = (newObject) => {

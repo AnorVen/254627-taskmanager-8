@@ -84,6 +84,7 @@ export const Database = {
       isDone: false,
       isEdit: false,
       isArchive: false,
+      deleted: false,
     },
     {
       title: [`Изучить теорию`,
@@ -103,6 +104,7 @@ export const Database = {
       isDone: false,
       isEdit: false,
       isArchive: false,
+      deleted: false,
     },
     {
       title: [`Изучить теорию`,
@@ -122,6 +124,7 @@ export const Database = {
       isDone: false,
       isEdit: false,
       isArchive: false,
+      deleted: false,
     },
     {
       title: [`Изучить теорию`,
@@ -141,6 +144,7 @@ export const Database = {
       isDone: false,
       isEdit: false,
       isArchive: false,
+      deleted: false,
     },
     {
       title: [`Изучить теорию`,
@@ -160,6 +164,7 @@ export const Database = {
       isDone: false,
       isEdit: false,
       isArchive: false,
+      deleted: false,
     },
     {
       title: [`Изучить теорию`,
@@ -179,6 +184,7 @@ export const Database = {
       isDone: false,
       isEdit: false,
       isArchive: false,
+      deleted: false,
     },
     {
       title: [`Изучить теорию`,
@@ -198,6 +204,7 @@ export const Database = {
       isDone: false,
       isEdit: false,
       isArchive: false,
+      deleted: false,
     },
   ],
 };
