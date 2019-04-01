@@ -95,7 +95,6 @@ export class TaskEdit extends Component {
             altInput: true,
             altFormat: `j F`,
             dateFormat: `j F`,
-            minDate: `today`,
           });
       flatpickr(
           this._element.querySelector(`.card__time`), {
@@ -158,7 +157,7 @@ export class TaskEdit extends Component {
     if (timeString[1] === `PM`) {
       hours = +hours + 12;
     }
-    this._dueDate.hour(hours).minute(minutes);
+    moment(this._dueDate).hour(hours).minute(minutes);
     this.reRender();
   }
 
@@ -169,7 +168,7 @@ export class TaskEdit extends Component {
 
     const value = this._element.querySelector(`.card__date`).value;
     const [date, month] = value.split(` `);
-    this._dueDate = this._dueDate.date(date).month(month);
+    this._dueDate = moment(this._dueDate).date(date).month(month);
     this.reRender();
   }
 
@@ -322,7 +321,7 @@ export class TaskEdit extends Component {
 
   get template() {
     return `
-    <article class="card card--edit card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}">
+    <article data-id="${this._id}" class="card card--edit card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}">
       <form class="card__form" method="get">
           <input type="hidden" value="${this._id}" class="hidden" name="id">
         <div class="card__inner">
@@ -359,11 +358,11 @@ export class TaskEdit extends Component {
                   class="card__date-deadline" ${!this._state.isDate ? `disabled` : ``}>
                     <label class="card__input-deadline-wrap">
                       <input class="card__date" type="text"
-                       value="${this._dueDate ? this._dueDate.format(`D MMMM`) : ``}" placeholder="23 September" name="date" />
+                       value="${this._dueDate ? moment(this._dueDate).format(`D MMMM`) : ``}" placeholder="23 September" name="date" />
                       </label>
                       <label class="card__input-deadline-wrap">
                         <input class="card__time" type="text" 
-                        value="${this._dueDate ? this._dueDate.format(`HH:mm A`) : ``}"
+                        value="${this._dueDate ? moment(this._dueDate).format(`HH:mm A`) : ``}"
                           placeholder="11:15 PM" name="time" />
                         </label>
                       </fieldset>

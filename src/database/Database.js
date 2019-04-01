@@ -1,15 +1,18 @@
-import moment from "moment";
+import moment from 'moment';
 export const CARD_VARIABLES = {
-  title: [`Изучить теорию`,
-    `Сделать домашку`,
-    `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-  dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * (Math.floor(Math.random() * 24)) * (Math.floor(Math.random() * 60)) * 60 * 1000),
-  tags: new Set([
-    `cinema`,
-    `entertainment`,
-    `myself`,
-    `cinema`,
-  ]),
+  title: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`][
+    Math.floor(Math.random() * 3)
+  ],
+  dueDate: moment(
+      Date.now() +
+      1 +
+      Math.floor(Math.random() * 7) *
+        Math.floor(Math.random() * 24) *
+        Math.floor(Math.random() * 60) *
+        60 *
+        1000
+  ),
+  tags: new Set([`cinema`, `entertainment`, `myself`, `cinema`]),
   picture: `http://picsum.photos/100/100?r=${Math.random()}`,
   COLOR: {
     black: `black`,
@@ -23,63 +26,188 @@ export const CARD_VARIABLES = {
   isDone: false,
   isEdit: false,
   isArchive: false,
-
 };
 
 export const Database = {
   FILTERS_DATA: [
     {
-      TITLE: `all`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
+      title: `all`,
+      count: Math.floor(Math.random() * 201),
+      checked: false,
     },
     {
-      TITLE: `OVERDUE`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
+      title: `OVERDUE`,
+      count: Math.floor(Math.random() * 201),
+      checked: false,
     },
     {
-      TITLE: `TODAY`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
+      title: `TODAY`,
+      count: Math.floor(Math.random() * 201),
+      checked: false,
     },
     {
-      TITLE: `FAVORITES`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
+      title: `FAVORITES`,
+      count: Math.floor(Math.random() * 201),
+      checked: false,
     },
     {
-      TITLE: `Repeating`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
+      title: `Repeating`,
+      count: Math.floor(Math.random() * 201),
+      checked: false,
     },
     {
-      TITLE: `Tags`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
+      title: `Tags`,
+      count: Math.floor(Math.random() * 201),
+      checked: false,
     },
     {
-      TITLE: `ARCHIVE`,
-      COUNT: Math.floor(Math.random() * 201),
-      CHECKED: false,
+      title: `ARCHIVE`,
+      count: Math.floor(Math.random() * 201),
+      checked: false,
     },
   ],
 
   CARD_DATA: [
     {
-      title: [`Изучить теорию`,
-        `Сделать домашку`,
-        `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-      dueDate: CARD_VARIABLES.dueDate,
-      tags: new Set([
-        `cinema`,
-        `entertainment`,
-        `myself`,
-        `newTags`,
-      ]),
+      title: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`][
+        Math.floor(Math.random() * 3)
+      ],
+      dueDate: moment(
+          Date.now() +
+          1 +
+          Math.floor(Math.random() * 7) *
+            Math.floor(Math.random() * 24) *
+            Math.floor(Math.random() * 60) *
+            60 *
+            1000
+      ),
+      tags: new Set([`cinema`, `entertainment`, `myself`, `newTags`]),
       picture: `http://picsum.photos/100/100?r=${Math.random()}`,
       color: CARD_VARIABLES.COLOR.black,
       repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
+      isFavorite: true,
+      isDone: true,
+      isEdit: false,
+      isArchive: false,
+      deleted: false,
+    },
+    {
+      title: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`][
+        Math.floor(Math.random() * 3)
+      ],
+      dueDate: moment(
+          Date.now() -
+          1 -
+          Math.floor(Math.random() * 7) *
+            Math.floor(Math.random() * 24) *
+            Math.floor(Math.random() * 60) *
+            60 *
+            1000
+      ),
+      tags: new Set(),
+      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
+      color: CARD_VARIABLES.COLOR.black,
+      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
+      isFavorite: true,
+      isDone: false,
+      isEdit: false,
+      isArchive: true,
+      deleted: false,
+    },
+    {
+      title: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`][
+        Math.floor(Math.random() * 3)
+      ],
+      dueDate: moment(Date.now()),
+      tags: new Set([`cinema`, `entertainment`, `newTags`]),
+      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
+      color: CARD_VARIABLES.COLOR.black,
+      repeatingDays: {
+        mo: false,
+        tu: false,
+        we: false,
+        th: false,
+        fr: false,
+        sa: false,
+        su: false,
+      },
+      isFavorite: false,
+      isDone: false,
+      isEdit: true,
+      isArchive: false,
+      deleted: false,
+    },
+    {
+      title: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`][
+        Math.floor(Math.random() * 3)
+      ],
+      dueDate: moment(
+          Date.now() +
+          1 -
+          Math.floor(Math.random() * 7) *
+            Math.floor(Math.random() * 24) *
+            Math.floor(Math.random() * 60) *
+            60 *
+            1000
+      ),
+      tags: new Set(),
+      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
+      color: CARD_VARIABLES.COLOR.black,
+      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
+      isFavorite: false,
+      isDone: true,
+      isEdit: false,
+      isArchive: false,
+      deleted: false,
+    },
+    {
+      title: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`][
+        Math.floor(Math.random() * 3)
+      ],
+      dueDate: moment(
+          Date.now() +
+          1 +
+          Math.floor(Math.random() * 7) *
+            Math.floor(Math.random() * 24) *
+            Math.floor(Math.random() * 60) *
+            60 *
+            1000
+      ),
+      tags: new Set([`cinema`, `entertainment`, `myself`, `newTags`]),
+      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
+      color: CARD_VARIABLES.COLOR.black,
+      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
+      isFavorite: false,
+      isDone: false,
+      isEdit: false,
+      isArchive: false,
+      deleted: true,
+    },
+    {
+      title: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`][
+        Math.floor(Math.random() * 3)
+      ],
+      dueDate: moment(
+          Date.now() +
+          1 +
+          Math.floor(Math.random() * 7) *
+            Math.floor(Math.random() * 24) *
+            Math.floor(Math.random() * 60) *
+            60 *
+            1000
+      ),
+      tags: new Set([`cinema`, `entertainment`, `myself`, `newTags`]),
+      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
+      color: CARD_VARIABLES.COLOR.black,
+      repeatingDays: {
+        mo: false,
+        tu: false,
+        we: false,
+        th: false,
+        fr: false,
+        sa: false,
+        su: false,
+      },
       isFavorite: true,
       isDone: false,
       isEdit: false,
@@ -87,119 +215,30 @@ export const Database = {
       deleted: false,
     },
     {
-      title: [`Изучить теорию`,
-        `Сделать домашку`,
-        `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-      dueDate: null,
-      tags: new Set([
-        `cinema`,
-        `entertainment`,
-        `myself`,
-        `newTags`,
-      ]),
+      title: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`][
+        Math.floor(Math.random() * 3)
+      ],
+      dueDate: moment(
+          Date.now() +
+          1 +
+          Math.floor(Math.random() * 7) *
+            Math.floor(Math.random() * 24) *
+            Math.floor(Math.random() * 60) *
+            60 *
+            1000
+      ),
+      tags: new Set(),
       picture: `http://picsum.photos/100/100?r=${Math.random()}`,
       color: CARD_VARIABLES.COLOR.black,
-      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
-      isFavorite: true,
-      isDone: false,
-      isEdit: false,
-      isArchive: false,
-      deleted: false,
-    },
-    {
-      title: [`Изучить теорию`,
-        `Сделать домашку`,
-        `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-      dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * (Math.floor(Math.random() * 24)) * (Math.floor(Math.random() * 60)) * 60 * 1000),
-      tags: new Set([
-        `cinema`,
-        `entertainment`,
-        `myself`,
-        `newTags`,
-      ]),
-      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
-      color: CARD_VARIABLES.COLOR.black,
-      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
-      isFavorite: true,
-      isDone: false,
-      isEdit: false,
-      isArchive: false,
-      deleted: false,
-    },
-    {
-      title: [`Изучить теорию`,
-        `Сделать домашку`,
-        `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-      dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * (Math.floor(Math.random() * 24)) * (Math.floor(Math.random() * 60)) * 60 * 1000),
-      tags: new Set([
-        `cinema`,
-        `entertainment`,
-        `myself`,
-        `newTags`,
-      ]),
-      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
-      color: CARD_VARIABLES.COLOR.black,
-      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
-      isFavorite: true,
-      isDone: false,
-      isEdit: false,
-      isArchive: false,
-      deleted: false,
-    },
-    {
-      title: [`Изучить теорию`,
-        `Сделать домашку`,
-        `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-      dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * (Math.floor(Math.random() * 24)) * (Math.floor(Math.random() * 60)) * 60 * 1000),
-      tags: new Set([
-        `cinema`,
-        `entertainment`,
-        `myself`,
-        `newTags`,
-      ]),
-      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
-      color: CARD_VARIABLES.COLOR.black,
-      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
-      isFavorite: true,
-      isDone: false,
-      isEdit: false,
-      isArchive: false,
-      deleted: false,
-    },
-    {
-      title: [`Изучить теорию`,
-        `Сделать домашку`,
-        `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-      dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * (Math.floor(Math.random() * 24)) * (Math.floor(Math.random() * 60)) * 60 * 1000),
-      tags: new Set([
-        `cinema`,
-        `entertainment`,
-        `myself`,
-        `newTags`,
-      ]),
-      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
-      color: CARD_VARIABLES.COLOR.black,
-      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
-      isFavorite: true,
-      isDone: false,
-      isEdit: false,
-      isArchive: false,
-      deleted: false,
-    },
-    {
-      title: [`Изучить теорию`,
-        `Сделать домашку`,
-        `Пройти интенсив на соточку`][Math.floor(Math.random() * 3)],
-      dueDate: moment(Date.now() + 1 + Math.floor(Math.random() * 7) * (Math.floor(Math.random() * 24)) * (Math.floor(Math.random() * 60)) * 60 * 1000),
-      tags: new Set([
-        `cinema`,
-        `entertainment`,
-        `myself`,
-        `newTags`,
-      ]),
-      picture: `http://picsum.photos/100/100?r=${Math.random()}`,
-      color: CARD_VARIABLES.COLOR.black,
-      repeatingDays: {mo: false, tu: true, we: false, th: true, fr: false, sa: false, su: false},
+      repeatingDays: {
+        mo: false,
+        tu: false,
+        we: false,
+        th: false,
+        fr: false,
+        sa: false,
+        su: false,
+      },
       isFavorite: true,
       isDone: false,
       isEdit: false,

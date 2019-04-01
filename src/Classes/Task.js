@@ -1,3 +1,4 @@
+
 import Component from './Component';
 export class Task extends Component {
   constructor({
@@ -36,7 +37,6 @@ export class Task extends Component {
 
     this._element = null;
     this._onEdit = null;
-
   }
 
   bind() {
@@ -71,7 +71,7 @@ export class Task extends Component {
 
 
   get template() {
-    return (`<article class="card card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}" >
+    return (`<article data-id="${this._id}" class="card card--${this._color} ${this._isRepeated() ? `card--repeat` : ``}" >
           <form class="card__form" method="get">
           <input type="hidden" value="${this._id}" class="hidden" name="id">
             <div class="card__inner">
