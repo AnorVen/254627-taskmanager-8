@@ -49,5 +49,3 @@ export class Filter extends Component {
         </div>`);
   }
 }
-
-

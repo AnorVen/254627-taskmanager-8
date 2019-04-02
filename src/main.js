@@ -3,13 +3,20 @@ import { Filter } from './Classes/Filter';
 import { TaskEdit } from './Classes/TaskEdit';
 import { Task } from './Classes/Task';
 import { Database as DB, CARD_VARIABLES } from './database/Database';
+import {buildChart, chartConteiner} from './statistic';
 const BoardTasks = document.querySelector(`.board__tasks`);
 const MainFilter = document.querySelector(`.main__filter`);
 const LoadMore = document.querySelector(`.load-more`);
+const boardContainer = document.querySelector(`.control__btn-wrap`);
 const controlStatistic = document.querySelector(`#control__statistic`);
-const boardContainer = document.querySelector(`.board.container`);
+const statisticPeriod = document.querySelector(`.statistic__period-input`);
+
 let initialTasks = DB.CARD_DATA;
 
+controlStatistic.addEventListener(`click`, () => {
+  console.log('stat')
+  chartConteiner(initialTasks);
+});
 
 
 const deleteTask = (tasks, i) => {
@@ -21,6 +28,13 @@ const updateTask = (tasks, i, newTask) => {
   tasks[i] = Object.assign({}, tasks[i], newTask);
   return tasks[i];
 };
+
+
+function loadMoreRender () {
+  initialTasks = initialTasks.concat(initialTasks);
+  BoardTasks.innerHTML = ``;
+  tasksRender(initialTasks);
+}
 
 function tasksRender(tasks) {
   for (let i = 0; i < tasks.length; i++) {
@@ -58,23 +72,7 @@ function tasksRender(tasks) {
   }
 }
 
-function clickOnFilterHandler(event) {
-  let target = event.target;
-  while (target !== MainFilter) {
-    if (target.className === `filter__label`) {
-      const filtertdTasks = filterTasks(
-        initialTasks,
-        target
-          .getAttribute(`for`)
-          .split(`__`)[1]
-          .toLowerCase()
-      );
-      BoardTasks.innerHTML = ``;
-      tasksRender(filtertdTasks);
-    }
-    target = target.parentNode;
-  }
-}
+
 
 function filtersRender(filters) {
   for (let i = 0; i < filters.length; i++) {
@@ -83,6 +81,8 @@ function filtersRender(filters) {
   }
   MainFilter.addEventListener('click', clickOnFilterHandler);
 }
+
+
 
 function filterTasks(initialTasks, filter) {
   switch (filter) {
@@ -107,21 +107,68 @@ function filterTasks(initialTasks, filter) {
   }
 }
 
-function LoadMoreRender () {
-  initialTasks = initialTasks.concat(initialTasks);
-  BoardTasks.innerHTML = ``;
-  tasksRender(initialTasks);
+function clickOnFilterHandler(event) {
+  let target = event.target;
+  while (target !== MainFilter) {
+    if (target.className === `filter__label`) {
+      const filtertdTasks = filterTasks(
+        initialTasks,
+        target
+          .getAttribute(`for`)
+          .split(`__`)[1]
+          .toLowerCase()
+      );
+      BoardTasks.innerHTML = ``;
+      tasksRender(filtertdTasks);
+    }
+    target = target.parentNode;
+  }
 }
+
+function toggleBoards(event) {
+  let target = event.target;
+  while (target !== boardContainer) {
+    if (target.className === `control__label`) {
+      return showBoard(target.getAttribute(`for`))
+    }
+    target = target.parentNode;
+  }
+}
+function showBoard(target){
+
+  document.querySelector(`.statistic.container`).classList.add(`visually-hidden`);
+  document.querySelector(`.result.container`).classList.add(`visually-hidden`);
+ // document.querySelector(`.search.container`).classList.add(`visually-hidden`);
+  document.querySelector(`.board.container`).classList.add(`visually-hidden`);
+
+  switch (target) {
+    case `control__task`:
+      document.querySelector(`.board`).classList
+      .remove(`visually-hidden`); break;
+    case `control__search`:
+      document.querySelector(`.search`).classList
+      .remove(`visually-hidden`); break;
+    case `control__statistic`:
+      document.querySelector(`.statistic`).classList
+      .remove(`visually-hidden`); break;
+    case `control__new-task`:
+      document.querySelector(`.board`).classList
+      .remove(`visually-hidden`); break;
+    default:   document.querySelector(`.board`).classList
+      .remove(`visually-hidden`);
+  }
+}
+
+
+
+
 
 window.onload = function() {
   filtersRender(DB.FILTERS_DATA);
   tasksRender(initialTasks);
 
-  LoadMore.addEventListener('click', LoadMoreRender );
-  controlStatistic.addEventListener(`click`, function() {
-    document.querySelector(`.statistic.container`).classList.toggle(`visually-hidden`);
-    boardContainer.classList.toggle(`visually-hidden`);
+  LoadMore.addEventListener('click', loadMoreRender );
+  boardContainer.addEventListener(`click`, toggleBoards)
 
-  })
 };
 // TODO сейчас при сохранении фильтрация все равно происходит по изначальным данным
