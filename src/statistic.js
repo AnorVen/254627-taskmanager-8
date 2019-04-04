@@ -2,8 +2,6 @@ import Chart from 'chart.js';
 import moment from 'moment';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import flatpickr from 'flatpickr';
-const tagsCtx = document.querySelector(`.statistic__tags`);
-const colorsCtx = document.querySelector(`.statistic__colors`);
 
 function getRandomColor() {
   let letters = `0123456789ABCDEF`.split(``);
@@ -14,11 +12,13 @@ function getRandomColor() {
   return color;
 }
 
-export function chartConteiner(tasks,
-    startDate = moment().startOf(`week`)
-                                 .format(`YYYY-MM-DD`),
-    endDate = moment().endOf(`week`)
-                                 .format(`YYYY-MM-DD`)) {
+export function chartConteiner(tasks) {
+  let startDate = moment().startOf(`week`)
+    .format(`YYYY-MM-DD`);
+  let endDate = moment().endOf(`week`)
+      .format(`YYYY-MM-DD`);
+
+
   flatpickr(document.querySelector(`.statistic__period-input`), {
     locale: {
       rangeSeparator: ` — `,
@@ -31,6 +31,23 @@ export function chartConteiner(tasks,
       endDate = moment(selectedDates[1]).format(`YYYY-MM-DD`);
     },
   });
+
+  buildChart(tasks, startDate, endDate);
+  return [startDate, endDate];
+
+}
+
+export function buildChart(tasks, startDate, endDate) {
+  let startDateTemp = moment(startDate);
+  let endDateTemp = moment(endDate);
+  const colorWrap = document.querySelector(`.statistic__colors-wrap`);
+  const tagsWrap = document.querySelector(`.statistic__tags-wrap`);
+  tagsWrap.classList.remove(`visually-hidden`);
+  colorWrap.classList.remove(`visually-hidden`);
+  colorWrap.outerHTML = `<div class="statistic__colors-wrap"><canvas class="statistic__colors" width="400" height="300"></canvas></div>`;
+  tagsWrap.outerHTML = `<div class="statistic__tags-wrap"><canvas class="statistic__tags" width="400" height="300"></canvas></div>`;
+  const tagsCtx = document.querySelector(`.statistic__tags`);
+  const colorsCtx = document.querySelector(`.statistic__colors`);
 
   // В разрезе цветов
   const colorForChart = {
@@ -47,11 +64,15 @@ export function chartConteiner(tasks,
   let backgroundColorColor = [];
 
   for (let i = 0; i < tasks.length; i++) {
-    let temp = tasks[i].color;
-    if (tempDataColor[temp]) {
-      tempDataColor[temp] += 1;
+    if (moment(tasks[i].dueDate).isBetween(startDateTemp, endDateTemp)) {
+      let temp = tasks[i].color;
+      if (tempDataColor[temp]) {
+        tempDataColor[temp] += 1;
+      } else {
+        tempDataColor[temp] = 1;
+      }
     } else {
-      tempDataColor[temp] = 1;
+      continue;
     }
   }
 
@@ -62,6 +83,7 @@ export function chartConteiner(tasks,
       backgroundColorColor.push(colorForChart[key]);
     }
   }
+
 
   const colorsChart = new Chart(colorsCtx, {
     plugins: [ChartDataLabels],
@@ -88,7 +110,7 @@ export function chartConteiner(tasks,
             const tooltipData = allData[tooltipItem.index];
             const total = allData.reduce((acc, it) => acc + parseFloat(it));
             const tooltipPercentage = Math.round((tooltipData / total) * 100);
-            return `${tooltipData} TASKS — ${tooltipPercentage}%`;
+            return `${tooltipData} ${data.labels[tooltipItem.index]} TASKS — ${tooltipPercentage}%`;
           },
         },
         displayColors: false,
@@ -127,13 +149,17 @@ export function chartConteiner(tasks,
   let backgroundColorTags = [];
 
   for (let i = 0; i < tasks.length; i++) {
-    let tags = tasks[i].tags;
-    for (let tag of tags) {
-      if (tempDataTags[tag]) {
-        tempDataTags[tag] += 1;
-      } else {
-        tempDataTags[tag] = 1;
+    if (moment(tasks[i].dueDate).isBetween(startDateTemp, endDateTemp)) {
+      let tags = tasks[i].tags;
+      for (let tag of tags) {
+        if (tempDataTags[tag]) {
+          tempDataTags[tag] += 1;
+        } else {
+          tempDataTags[tag] = 1;
+        }
       }
+    } else {
+      continue;
     }
   }
 
@@ -202,10 +228,4 @@ export function chartConteiner(tasks,
   });
 
   return [tagsChart, colorsChart];
-}
-
-export function buildChart(tasks) {
-
-
-
 }

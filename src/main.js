@@ -18,6 +18,11 @@ controlStatistic.addEventListener(`click`, () => {
   chartConteiner(initialTasks);
 });
 
+statisticPeriod.addEventListener("change", ()=> {
+  let startDate = statisticPeriod.value.split(` — `)[0];
+  let endDate = statisticPeriod.value.split(` — `)[1];
+  buildChart(initialTasks, startDate, endDate)
+});
 
 const deleteTask = (tasks, i) => {
   tasks.splice(i, 1);
@@ -38,7 +43,7 @@ function loadMoreRender () {
 
 function tasksRender(tasks) {
   for (let i = 0; i < tasks.length; i++) {
-    let taskComponent = new Task({ id: i, ...tasks[i] });
+    let taskComponent = new Task({ id: i, ...tasks[i] }); /* eslint-disable-line */
     let editTaskComponent = new TaskEdit({ id: i, ...tasks[i] });
     if (tasks[i].deleted) {
       continue;
